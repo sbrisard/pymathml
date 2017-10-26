@@ -1,66 +1,110 @@
 import numbers
 import xml.etree.ElementTree as ET
 
+INVISIBLE_TIMES = '\N{INVISIBLE TIMES}'
+FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
 
 class Expression:
     def __add__(self, other):
         return Add(self, expression(other))
 
+    def __radd__(self, other):
+        return Add(expression(other), self)
+
+    def __sub__(self, other):
+        return Sub(self, expression(other))
+
+    def __rsub__(self, other):
+        return Add(expression(other), self)
+
+    def __mul__(self, other):
+        return Mul(self, expression(other))
+
+    def __rmul__(self, other):
+        return Mul(expression(other), self)
+
     def __pow__(self, other):
         return Power(self, expression(other))
 
     def __getitem__(self, key):
-        return Sub(self, key)
+        subscript = (Fenced(*key, open='', close='')
+                     if isinstance(key, tuple) else expression(key))
+        return Subscript(self, subscript)
+
+    def __call__(self, *args):
+        return Group(self, Operator(FUNCTION_APPLICATION), Fenced(*args))
 
 
-class Atom(Expression):
-    pass
-
-
-class Number(Atom):
-    def __init__(self, value):
+class Token(Expression):
+    def __init__(self, value, **attributes):
         self.value = value
+        self.attributes = attributes
 
     def to_mml(self):
-        e = ET.Element('mn')
+        e = ET.Element(self.tag)
         e.text = str(self.value)
         return e
 
 
-class Identifier(Atom):
-    def __init__(self, name):
-        self.name = name
+class Identifier(Token):
+    tag = 'mi'
+
+
+class Number(Token):
+    tag = 'mn'
+
+
+class Operator(Token):
+    tag = 'mo'
+
+
+class Text(Token):
+    tag = 'mtext'
+
+
+class Operation(Expression):
+    def __init__(self, *children):
+        self.children = children
 
     def to_mml(self):
-        e = ET.Element('mi')
-        e.text = str(self.name)
-        return e
+        children = [self.children[0]]
+        for child in self.children[1:]:
+            children.append(self.op)
+            children.append(child)
+        return to_mml(Group(*children))
 
 
-class Add(Expression):
-    def __init__(self, elt1, elt2, *elts):
-        self.children = [elt1, elt2]+list(elts)
-        # TODO This should be a class variable
-        self.mo = ET.Element('mo')
-        self.mo.text = '+'
+class Add(Operation):
+    op = Operator('+')
+
+
+class Sub(Operation):
+    op = Operator('-')
+
+
+class Mul(Operation):
+    op = Operator(INVISIBLE_TIMES)
+
+
+class Group(Expression):
+    def __init__(self, *expressions):
+        self.children = expressions
 
     def to_mml(self):
         e = ET.Element('mrow')
-        it = iter(self.children)
-        e.append(next(it).to_mml())
-        for child in it:
-            e.append(self.mo)
-            e.append(child.to_mml())
+        for child in self.children:
+            e.append(to_mml(child))
         return e
 
-
 class Fenced(Expression):
-    def __init__(self, expr):
-        self.child = expr
+    def __init__(self, *expressions, **attributes):
+        self.children = expressions
+        self.attributes = attributes
 
     def to_mml(self):
-        e = ET.Element('mfenced')
-        e.append(self.child.to_mml())
+        e = ET.Element('mfenced', self.attributes)
+        for child in self.children:
+            e.append(to_mml(child))
         return e
 
 
@@ -71,7 +115,7 @@ class Power(Expression):
 
     def to_mml(self):
         e = ET.Element('msup')
-        if isinstance(self.base, Atom):
+        if isinstance(self.base, Token):
             e.append(self.base.to_mml())
         else:
             e.append(Fenced(self.base).to_mml())
@@ -79,7 +123,7 @@ class Power(Expression):
         return e
 
 
-class Sub(Expression):
+class Subscript(Expression):
     def __init__(self, base, subscript):
         self.base = base
         self.subscript = subscript
@@ -98,6 +142,8 @@ def to_mml(expr):
         return Number(expr).to_mml()
     elif isinstance(expr, str):
         return Identifier(expr).to_mml()
+    else:
+        raise ValueError(expr)
 
 
 def expression(expr):
@@ -124,7 +170,9 @@ if __name__ == '__main__':
     two = Number(2)
     a = Identifier('a')
     b = Identifier('b')
-    expr = (a+b[4])**2
+    x = Identifier('x')
+    y = Identifier('y')
+    expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
