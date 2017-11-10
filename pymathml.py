@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 INVISIBLE_TIMES = '\N{INVISIBLE TIMES}'
 FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
 
+
 class Expression:
     def __add__(self, other):
         return Add(self, expression(other))
