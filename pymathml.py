@@ -47,6 +47,18 @@ class Token(Expression):
         return e
 
 
+class LayoutScheme(Expression):
+    def __init__(self, *expressions, **attributes):
+        self.children = expressions
+        self.attributes = attributes
+
+    def to_mml(self):
+        e = ET.Element(self.tag, self.attributes)
+        for child in self.children:
+            e.append(to_mml(child))
+        return e
+
+
 class Identifier(Token):
     tag = 'mi'
 
@@ -61,6 +73,39 @@ class Operator(Token):
 
 class Text(Token):
     tag = 'mtext'
+
+
+class Group(LayoutScheme):
+    tag = 'mrow'
+
+
+class Frac(LayoutScheme):
+    tag = 'mfrac'
+
+    def __init__(self, numerator, denominator, **attributes):
+        super().__init__(numerator, denominator, **attributes)
+
+
+class Sqrt(LayoutScheme):
+    tag = 'msqrt'
+
+    def __init__(self, base, **attributes):
+        super().__init__(base, **attributes)
+
+
+class Root(LayoutScheme):
+    tag = 'msqrt'
+
+    def __init__(self, base, index, **attributes):
+        super().__init__(base, index, **attributes)
+
+
+class Style(LayoutScheme):
+    tag = 'mstyle'
+
+
+class Fenced(LayoutScheme):
+    tag = 'mfenced'
 
 
 class Operation(Expression):
@@ -85,28 +130,6 @@ class Sub(Operation):
 
 class Mul(Operation):
     op = Operator(INVISIBLE_TIMES)
-
-
-class Group(Expression):
-    def __init__(self, *expressions):
-        self.children = expressions
-
-    def to_mml(self):
-        e = ET.Element('mrow')
-        for child in self.children:
-            e.append(to_mml(child))
-        return e
-
-class Fenced(Expression):
-    def __init__(self, *expressions, **attributes):
-        self.children = expressions
-        self.attributes = attributes
-
-    def to_mml(self):
-        e = ET.Element('mfenced', self.attributes)
-        for child in self.children:
-            e.append(to_mml(child))
-        return e
 
 
 class Power(Expression):
@@ -171,9 +194,12 @@ if __name__ == '__main__':
     two = Number(2)
     a = Identifier('a')
     b = Identifier('b')
+    #xc = Identifier('c')
     x = Identifier('x')
     y = Identifier('y')
-    expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
+    Delta = b**2-4*a*'c'
+    expr = Frac(b-Sqrt(Delta), 2*a)
+    #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
