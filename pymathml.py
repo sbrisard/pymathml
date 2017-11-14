@@ -6,6 +6,16 @@ FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
 
 
 class Expression:
+    def __init__(self, *expressions, **attributes):
+        self.children = expressions
+        self.attributes = attributes
+
+    def to_mml(self):
+        e = ET.Element(self.tag, self.attributes)
+        for child in self.children:
+            e.append(to_mml(child))
+        return e
+
     def __add__(self, other):
         return Add(self, expression(other))
 
@@ -47,18 +57,6 @@ class Token(Expression):
         return e
 
 
-class LayoutScheme(Expression):
-    def __init__(self, *expressions, **attributes):
-        self.children = expressions
-        self.attributes = attributes
-
-    def to_mml(self):
-        e = ET.Element(self.tag, self.attributes)
-        for child in self.children:
-            e.append(to_mml(child))
-        return e
-
-
 class Identifier(Token):
     tag = 'mi'
 
@@ -75,36 +73,36 @@ class Text(Token):
     tag = 'mtext'
 
 
-class Group(LayoutScheme):
+class Group(Expression):
     tag = 'mrow'
 
 
-class Frac(LayoutScheme):
+class Frac(Expression):
     tag = 'mfrac'
 
     def __init__(self, numerator, denominator, **attributes):
         super().__init__(numerator, denominator, **attributes)
 
 
-class Sqrt(LayoutScheme):
+class Sqrt(Expression):
     tag = 'msqrt'
 
     def __init__(self, base, **attributes):
         super().__init__(base, **attributes)
 
 
-class Root(LayoutScheme):
+class Root(Expression):
     tag = 'mroot'
 
     def __init__(self, base, index, **attributes):
         super().__init__(base, index, **attributes)
 
 
-class Style(LayoutScheme):
+class Style(Expression):
     tag = 'mstyle'
 
 
-class Fenced(LayoutScheme):
+class Fenced(Expression):
     tag = 'mfenced'
 
 
