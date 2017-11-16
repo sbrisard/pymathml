@@ -131,30 +131,17 @@ class Mul(Operation):
 
 
 class Superscript(Expression):
-    def __init__(self, base, exponent):
-        self.base = base
-        self.exponent = exponent
+    tag = 'msup'
 
-    def to_mml(self):
-        e = ET.Element('msup')
-        if isinstance(self.base, Token):
-            e.append(self.base.to_mml())
-        else:
-            e.append(Fenced(self.base).to_mml())
-        e.append(self.exponent.to_mml())
-        return e
+    def __init__(self, base, superscript, **attributes):
+        super().__init__(base, superscript, **attributes)
 
 
 class Subscript(Expression):
-    def __init__(self, base, subscript):
-        self.base = base
-        self.subscript = subscript
+    tag = 'msub'
 
-    def to_mml(self):
-        e = ET.Element('msub')
-        e.append(to_mml(self.base))
-        e.append(to_mml(self.subscript))
-        return e
+    def __init__(self, base, subscript, **attributes):
+        super().__init__(base, subscript, **attributes)
 
 
 def to_mml(expr):
@@ -196,7 +183,7 @@ if __name__ == '__main__':
     x = Identifier('x')
     y = Identifier('y')
     Delta = b**2-4*a*'c'
-    expr = Frac(b-Root(Delta, 2), 2*a)
+    expr = x[1, 2]+Frac(b-Root(Delta, 2), 2*a)
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     mml = expr.to_mml()
     ET.dump(mml)
