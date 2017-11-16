@@ -11,7 +11,8 @@ class Expression:
         self.attributes = attributes
 
     def to_mml(self):
-        e = ET.Element(self.tag, self.attributes)
+        tag = self.tag if hasattr(self, 'tag') else type(self).__name__
+        e = ET.Element(tag, self.attributes)
         for child in self.children:
             e.append(to_mml(child))
         return e
@@ -130,6 +131,13 @@ class Mul(Operation):
     op = Operator(INVISIBLE_TIMES)
 
 
+class Subscript(Expression):
+    tag = 'msub'
+
+    def __init__(self, base, subscript, **attributes):
+        super().__init__(base, subscript, **attributes)
+
+
 class Superscript(Expression):
     tag = 'msup'
 
@@ -137,11 +145,9 @@ class Superscript(Expression):
         super().__init__(base, superscript, **attributes)
 
 
-class Subscript(Expression):
-    tag = 'msub'
-
-    def __init__(self, base, subscript, **attributes):
-        super().__init__(base, subscript, **attributes)
+class msubsup(Expression):
+    def __init__(self, base, subscript, superscript, **attributes):
+        super().__init__(base, subscript, superscript, **attributes)
 
 
 def to_mml(expr):
@@ -183,9 +189,11 @@ if __name__ == '__main__':
     x = Identifier('x')
     y = Identifier('y')
     Delta = b**2-4*a*'c'
-    expr = x[1, 2]+Frac(b-Root(Delta, 2), 2*a)
+    expr = x[1, 2]+msubsup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
     tree.write('essai.mml')
+    print(type(tree).__name__)
+    print(type(a).__name__)
