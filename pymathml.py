@@ -35,7 +35,7 @@ class Expression:
         return Mul(expression(other), self)
 
     def __pow__(self, other):
-        return Power(self, expression(other))
+        return Superscript(self, expression(other))
 
     def __getitem__(self, key):
         subscript = (Fenced(*key, open='', close='')
@@ -130,7 +130,7 @@ class Mul(Operation):
     op = Operator(INVISIBLE_TIMES)
 
 
-class Power(Expression):
+class Superscript(Expression):
     def __init__(self, base, exponent):
         self.base = base
         self.exponent = exponent
