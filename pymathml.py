@@ -18,16 +18,16 @@ class Expression:
         return e
 
     def __add__(self, other):
-        return Add(self, expression(other))
+        return Plus(self, expression(other))
 
     def __radd__(self, other):
-        return Add(expression(other), self)
+        return Plus(expression(other), self)
 
     def __sub__(self, other):
         return Sub(self, expression(other))
 
     def __rsub__(self, other):
-        return Add(expression(other), self)
+        return Sub(expression(other), self)
 
     def __mul__(self, other):
         return Mul(self, expression(other))
@@ -119,7 +119,7 @@ class Operation(Expression):
         return to_mml(Group(*children))
 
 
-class Add(Operation):
+class Plus(Operation):
     op = Operator('+')
 
 
