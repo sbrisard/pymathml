@@ -174,6 +174,26 @@ class SubSup(Expression):
         super().__init__(base, subscript, superscript, **attributes)
 
 
+class Under(Expression):
+    tag = 'munder'
+
+    def __init__(self, base, underscript, **attributes):
+        super().__init__(base, underscript, **attributes)
+
+
+class Over(Expression):
+    tag = 'mover'
+
+    def __init__(self, base, overscript, **attributes):
+        super().__init__(base, overscript, **attributes)
+
+
+class UnderOver(Expression):
+    tag = 'munderover'
+
+    def __init__(self, base, underscript, overscript, **attributes):
+        super().__init__(base, underscript, overscript, **attributes)
+
 def to_mml(expr):
     if hasattr(expr, 'to_mml'):
         return expr.to_mml()
