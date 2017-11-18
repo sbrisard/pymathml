@@ -24,10 +24,10 @@ class Expression:
         return Plus(expression(other), self)
 
     def __sub__(self, other):
-        return Sub(self, expression(other))
+        return Minus(self, expression(other))
 
     def __rsub__(self, other):
-        return Sub(expression(other), self)
+        return Minus(expression(other), self)
 
     def __mul__(self, other):
         return Mul(self, expression(other))
@@ -123,7 +123,7 @@ class Plus(Operation):
     op = Operator('+')
 
 
-class Sub(Operation):
+class Minus(Operation):
     op = Operator('-')
 
 
