@@ -30,10 +30,10 @@ class Expression:
         return Minus(expression(other), self)
 
     def __mul__(self, other):
-        return Mul(self, expression(other))
+        return Times(self, expression(other))
 
     def __rmul__(self, other):
-        return Mul(expression(other), self)
+        return Times(expression(other), self)
 
     def __pow__(self, other):
         return Superscript(self, expression(other))
@@ -127,7 +127,7 @@ class Minus(Operation):
     op = Operator('-')
 
 
-class Mul(Operation):
+class Times(Operation):
     op = Operator(INVISIBLE_TIMES)
 
 
