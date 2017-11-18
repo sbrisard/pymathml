@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 INVISIBLE_TIMES = '\N{INVISIBLE TIMES}'
 FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
-
+N_ARY_SUMMATION = '\N{N-ARY SUMMATION}'
 
 class Expression:
     def __init__(self, *expressions, **attributes):
@@ -133,6 +133,24 @@ class UnaryOperation(Expression):
         return to_mml(Row(self.op, self.children[0], **self.attributes))
 
 
+class NAryOperation(Expression):
+    def __init__(self, expr, start, end, **attributes):
+        super().__init__(expr, start, end, **attributes)
+
+    def to_mml(self):
+        expr, start, end = self.children
+        op = self.op
+        if end is None:
+            if start:
+                op = Under(self.op, start)
+        else:
+            if start is None:
+                op = Over(self.op, end)
+            else:
+                op = UnderOver(self.op, start, end)
+        return to_mml(Row(op, expr, **self.attributes))
+
+
 class Plus(Operation):
     op = Operator('+')
 
@@ -194,6 +212,11 @@ class UnderOver(Expression):
     def __init__(self, base, underscript, overscript, **attributes):
         super().__init__(base, underscript, overscript, **attributes)
 
+
+class Sum(NAryOperation):
+    op = Operator(N_ARY_SUMMATION)
+
+
 def to_mml(expr):
     if hasattr(expr, 'to_mml'):
         return expr.to_mml()
@@ -232,10 +255,12 @@ if __name__ == '__main__':
     c = Identifier('c')
     x = Identifier('x')
     y = Identifier('y')
+    n = Identifier('n')
     Delta = b**2-4*a*'c'
     #expr = x[1, 2]+SubSup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
-    expr = Frac(+b-Sqrt(b**2-4*a*c), a)
+    #expr = Frac(+b-Sqrt(b**2-4*a*c), a)
+    expr = Sum(Frac(1, n**2), 1, 'N')
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
