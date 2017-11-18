@@ -41,6 +41,9 @@ class Expression:
     def __neg__(self):
         return Neg(self)
 
+    def __pos__(self):
+        return Pos(self)
+
     def __getitem__(self, key):
         subscript = (Fenced(*key, open='', close='')
                      if isinstance(key, tuple) else expression(key))
@@ -146,6 +149,10 @@ class Neg(UnaryOperation):
     op = Operator('-')
 
 
+class Pos(UnaryOperation):
+    op = Operator('+')
+
+
 class Sub(Expression):
     tag = 'msub'
 
@@ -208,7 +215,7 @@ if __name__ == '__main__':
     Delta = b**2-4*a*'c'
     #expr = x[1, 2]+SubSup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
-    expr = Frac(-b-Sqrt(b**2-4*a*c), a)
+    expr = Frac(+b-Sqrt(b**2-4*a*c), a)
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
