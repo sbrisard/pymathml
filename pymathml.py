@@ -44,7 +44,7 @@ class Expression:
         return Sub(self, subscript)
 
     def __call__(self, *args):
-        return Group(self, Operator(FUNCTION_APPLICATION), Fenced(*args))
+        return Row(self, Operator(FUNCTION_APPLICATION), Fenced(*args))
 
 
 class Token(Expression):
@@ -74,7 +74,7 @@ class Text(Token):
     tag = 'mtext'
 
 
-class Group(Expression):
+class Row(Expression):
     tag = 'mrow'
 
 
@@ -116,7 +116,7 @@ class Operation(Expression):
         for child in self.children[1:]:
             children.append(self.op)
             children.append(child)
-        return to_mml(Group(*children))
+        return to_mml(Row(*children))
 
 
 class Plus(Operation):
