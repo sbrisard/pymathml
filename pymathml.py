@@ -36,12 +36,12 @@ class Expression:
         return Times(expression(other), self)
 
     def __pow__(self, other):
-        return Superscript(self, expression(other))
+        return Sup(self, expression(other))
 
     def __getitem__(self, key):
         subscript = (Fenced(*key, open='', close='')
                      if isinstance(key, tuple) else expression(key))
-        return Subscript(self, subscript)
+        return Sub(self, subscript)
 
     def __call__(self, *args):
         return Group(self, Operator(FUNCTION_APPLICATION), Fenced(*args))
@@ -131,21 +131,23 @@ class Times(Operation):
     op = Operator(INVISIBLE_TIMES)
 
 
-class Subscript(Expression):
+class Sub(Expression):
     tag = 'msub'
 
     def __init__(self, base, subscript, **attributes):
         super().__init__(base, subscript, **attributes)
 
 
-class Superscript(Expression):
+class Sup(Expression):
     tag = 'msup'
 
     def __init__(self, base, superscript, **attributes):
         super().__init__(base, superscript, **attributes)
 
 
-class msubsup(Expression):
+class SubSup(Expression):
+    tag = 'msubsup'
+
     def __init__(self, base, subscript, superscript, **attributes):
         super().__init__(base, subscript, superscript, **attributes)
 
@@ -189,7 +191,7 @@ if __name__ == '__main__':
     x = Identifier('x')
     y = Identifier('y')
     Delta = b**2-4*a*'c'
-    expr = x[1, 2]+msubsup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
+    expr = x[1, 2]+SubSup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     mml = expr.to_mml()
     ET.dump(mml)
