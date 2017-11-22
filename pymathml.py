@@ -11,8 +11,7 @@ class Expression:
         self.attributes = attributes
 
     def to_mml(self):
-        tag = self.tag if hasattr(self, 'tag') else type(self).__name__
-        e = ET.Element(tag, self.attributes)
+        e = ET.Element(self.tag, self.attributes)
         for child in self.children:
             e.append(to_mml(child))
         return e
