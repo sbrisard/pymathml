@@ -112,7 +112,7 @@ class Fenced(Expression):
     tag = 'mfenced'
 
 
-class Operation(Expression):
+class BinaryOperation(Expression):
     def __init__(self, *children):
         self.children = children
 
@@ -150,24 +150,28 @@ class NAryOperation(Expression):
         return to_mml(Row(op, expr, **self.attributes))
 
 
-class Plus(Operation):
-    op = Operator('+')
-
-
-class Minus(Operation):
-    op = Operator('-')
-
-
-class Times(Operation):
-    op = Operator(INVISIBLE_TIMES)
-
-
 class Neg(UnaryOperation):
     op = Operator('-')
 
 
 class Pos(UnaryOperation):
     op = Operator('+')
+
+
+class Plus(BinaryOperation):
+    op = Operator('+')
+
+
+class Minus(BinaryOperation):
+    op = Operator('-')
+
+
+class Times(BinaryOperation):
+    op = Operator(INVISIBLE_TIMES)
+
+
+class Sum(NAryOperation):
+    op = Operator(N_ARY_SUMMATION)
 
 
 class Sub(Expression):
@@ -210,10 +214,6 @@ class UnderOver(Expression):
 
     def __init__(self, base, underscript, overscript, **attributes):
         super().__init__(base, underscript, overscript, **attributes)
-
-
-class Sum(NAryOperation):
-    op = Operator(N_ARY_SUMMATION)
 
 
 def to_mml(expr):
