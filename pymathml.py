@@ -264,5 +264,3 @@ if __name__ == '__main__':
     ET.dump(mml)
     tree = block_mml(expr)
     tree.write('essai.mml')
-    print(type(tree).__name__)
-    print(type(a).__name__)
