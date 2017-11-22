@@ -158,6 +158,10 @@ class Pos(UnaryOperation):
     op = Operator('+')
 
 
+class Equals(BinaryOperation):
+    op = Operator('=')
+
+
 class Plus(BinaryOperation):
     op = Operator('+')
 
