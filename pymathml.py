@@ -5,6 +5,7 @@ INVISIBLE_TIMES = '\N{INVISIBLE TIMES}'
 FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
 N_ARY_SUMMATION = '\N{N-ARY SUMMATION}'
 
+
 class Expression:
     def __init__(self, *expressions, **attributes):
         self.children = expressions
@@ -242,6 +243,14 @@ def expression(expr):
         raise ValueError()
 
 
+def identifiers(*names, **attributes):
+    """Return instances of Identifier with specified names.
+
+    All returned instances of class Identifier have same attributes.
+    """
+    return tuple(Identifier(name, **attributes) for name in names)
+
+
 def block_mml(expr):
     math = ET.Element('math',
                       xmlns='http://www.w3.org/1998/Math/MathML',
@@ -264,6 +273,11 @@ if __name__ == '__main__':
     #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
     #expr = Frac(+b-Sqrt(b**2-4*a*c), a)
     expr = Sum(Frac(1, n**2), 1, 'N')
+
+    p, i, m, n = identifiers('p', 'i', 'm', 'n')
+    expr = Sum(Fenced(p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
+
+
     mml = expr.to_mml()
     ET.dump(mml)
     tree = block_mml(expr)
