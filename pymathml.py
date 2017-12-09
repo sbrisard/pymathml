@@ -282,6 +282,14 @@ if __name__ == '__main__':
     p, i, m, n = identifiers('p', 'i', 'm', 'n')
     expr = Sum(Fenced(p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
 
+    underbrace = Operator('&UnderBrace;')
+    expr = Under(expr,
+                 Under(underbrace, Text('top-left corner', accentunder='true')))
 
     tree = ET.ElementTree(to_mml(expr, display='block'))
     tree.write('essai.mml')
+
+    e = ET.Element('mo',
+                   xmlns='http://www.w3.org/1998/Math/MathML')
+    e.text = '&UnderBrace;'
+    ET.dump(e)
