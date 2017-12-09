@@ -133,7 +133,7 @@ class UnaryOperation(Expression):
         return to_mml(Row(self.op, self.children[0], **self.attributes))
 
 
-class NAryOperation(Expression):
+class NaryOperation(Expression):
     def __init__(self, expr, start, end, **attributes):
         super().__init__(expr, start, end, **attributes)
 
@@ -175,7 +175,7 @@ class Times(BinaryOperation):
     op = Operator(INVISIBLE_TIMES)
 
 
-class Sum(NAryOperation):
+class Sum(NaryOperation):
     op = Operator(N_ARY_SUMMATION)
 
 
