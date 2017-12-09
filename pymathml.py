@@ -12,6 +12,9 @@ class Expression:
         self.attributes = attributes
 
     def to_mml(self):
+        """Return the MathML repr of this object as an ``ElementTree.Element``.
+
+        """
         e = ET.Element(self.tag, self.attributes)
         for child in self.children:
             e.append(to_mml(child))
@@ -122,7 +125,7 @@ class BinaryOperation(Expression):
         for child in self.children[1:]:
             children.append(self.op)
             children.append(child)
-        return to_mml(Row(*children))
+        return Row(*children).to_mml()
 
 
 class UnaryOperation(Expression):
@@ -130,7 +133,7 @@ class UnaryOperation(Expression):
         super().__init__(child, **attributes)
 
     def to_mml(self):
-        return to_mml(Row(self.op, self.children[0], **self.attributes))
+        return Row(self.op, self.children[0], **self.attributes).to_mml()
 
 
 class NaryOperation(Expression):
@@ -148,7 +151,7 @@ class NaryOperation(Expression):
                 op = Over(self.op, end)
             else:
                 op = UnderOver(self.op, start, end)
-        return to_mml(Row(op, expr, **self.attributes))
+        return Row(op, expr, **self.attributes).to_mml()
 
 
 class Neg(UnaryOperation):
@@ -221,17 +224,6 @@ class UnderOver(Expression):
         super().__init__(base, underscript, overscript, **attributes)
 
 
-def to_mml(expr):
-    if hasattr(expr, 'to_mml'):
-        return expr.to_mml()
-    elif isinstance(expr, numbers.Number):
-        return Number(expr).to_mml()
-    elif isinstance(expr, str):
-        return Identifier(expr).to_mml()
-    else:
-        raise ValueError(expr)
-
-
 def expression(expr):
     if isinstance(expr, Expression):
         return expr
@@ -251,12 +243,25 @@ def identifiers(*names, **attributes):
     return tuple(Identifier(name, **attributes) for name in names)
 
 
-def block_mml(expr):
-    math = ET.Element('math',
-                      xmlns='http://www.w3.org/1998/Math/MathML',
-                      display='block')
-    math.append(expr.to_mml())
-    return ET.ElementTree(math)
+def to_mml(expr, display=None):
+    """Return the MathML code for the specified expression.
+
+    The MathML code is returned as an ``ElementTree.Element``.
+
+    If `display` is not ``None``, then the expression is embedded into
+    a ``math`` tag, with the specified 'display' attribute (namely:
+    'inline' or 'block').  If `mode` is 'plain', then the returned
+
+    """
+    e = expression(expr).to_mml()
+    if display is None:
+        return e
+    else:
+        math = ET.Element('math',
+                          xmlns='http://www.w3.org/1998/Math/MathML',
+                          display=str(display))
+        math.append(e)
+        return math
 
 
 if __name__ == '__main__':
@@ -278,7 +283,5 @@ if __name__ == '__main__':
     expr = Sum(Fenced(p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
 
 
-    mml = expr.to_mml()
-    ET.dump(mml)
-    tree = block_mml(expr)
+    tree = ET.ElementTree(to_mml(expr, display='block'))
     tree.write('essai.mml')
