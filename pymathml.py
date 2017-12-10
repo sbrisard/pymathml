@@ -1,9 +1,19 @@
 import numbers
-import xml.etree.ElementTree as ET
 
-INVISIBLE_TIMES = '\N{INVISIBLE TIMES}'
-FUNCTION_APPLICATION = '\N{FUNCTION APPLICATION}'
-N_ARY_SUMMATION = '\N{N-ARY SUMMATION}'
+def xml_element(tag, *children, text=None, **attributes):
+    if text is None:
+        text = ''
+    if attributes == {}:
+        attr = ''
+    else:
+        attr = ' '+' '.join('{}="{}"'.format(k, str(v))
+                            for k, v in attributes.items())
+    if attributes is None:
+        attr = ''
+    s = u'<{0}{1}>{2}{3}</{0}>'.format(tag, attr,
+                                       ''.join(str(c) for c in children),
+                                       str(text))
+    return s
 
 
 class Expression:
@@ -12,13 +22,12 @@ class Expression:
         self.attributes = attributes
 
     def to_mml(self):
-        """Return the MathML repr of this object as an ``ElementTree.Element``.
+        """Return the MathML representation of this object as a string.
 
         """
-        e = ET.Element(self.tag, self.attributes)
-        for child in self.children:
-            e.append(to_mml(child))
-        return e
+        return xml_element(self.tag,
+                           *[to_mml(child) for child in self.children],
+                           **self.attributes)
 
     def __add__(self, other):
         return Plus(self, expression(other))
@@ -53,7 +62,7 @@ class Expression:
         return Sub(self, subscript)
 
     def __call__(self, *args):
-        return Row(self, Operator(FUNCTION_APPLICATION), Fenced(*args))
+        return Row(self, Operator('&ApplyFunction;'), Fenced(*args))
 
 
 class Token(Expression):
@@ -62,9 +71,7 @@ class Token(Expression):
         self.attributes = attributes
 
     def to_mml(self):
-        e = ET.Element(self.tag)
-        e.text = str(self.value)
-        return e
+        return xml_element(self.tag, text=str(self.value), **self.attributes)
 
 
 class Identifier(Token):
@@ -175,11 +182,11 @@ class Minus(BinaryOperation):
 
 
 class Times(BinaryOperation):
-    op = Operator(INVISIBLE_TIMES)
+    op = Operator('&InvisibleTimes;')
 
 
 class Sum(NaryOperation):
-    op = Operator(N_ARY_SUMMATION)
+    op = Operator('&Sum;')
 
 
 class Sub(Expression):
@@ -257,11 +264,9 @@ def to_mml(expr, display=None):
     if display is None:
         return e
     else:
-        math = ET.Element('math',
-                          xmlns='http://www.w3.org/1998/Math/MathML',
-                          display=str(display))
-        math.append(e)
-        return math
+        return xml_element('math', e,
+                           xmlns='http://www.w3.org/1998/Math/MathML',
+                           display=str(display))
 
 
 if __name__ == '__main__':
@@ -280,16 +285,12 @@ if __name__ == '__main__':
     expr = Sum(Frac(1, n**2), 1, 'N')
 
     p, i, m, n = identifiers('p', 'i', 'm', 'n')
-    expr = Sum(Fenced(p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
+    expr = Sum(Fenced(2*p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
 
     underbrace = Operator('&UnderBrace;')
     expr = Under(expr,
                  Under(underbrace, Text('top-left corner', accentunder='true')))
-
-    tree = ET.ElementTree(to_mml(expr, display='block'))
-    tree.write('essai.mml')
-
-    e = ET.Element('mo',
-                   xmlns='http://www.w3.org/1998/Math/MathML')
-    e.text = '&UnderBrace;'
-    ET.dump(e)
+    with open('essai.html', 'w', encoding='utf8') as f:
+        f.write('<html><body>')
+        f.write(to_mml(expr, display='block'))
+        f.write('</body></html>')
