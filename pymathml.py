@@ -124,9 +124,6 @@ class Fenced(Expression):
 
 
 class BinaryOperation(Expression):
-    def __init__(self, *children):
-        self.children = children
-
     def to_mml(self):
         children = [self.children[0]]
         for child in self.children[1:]:
