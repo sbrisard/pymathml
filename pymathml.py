@@ -259,7 +259,7 @@ def to_mml(expr, display=None):
     'inline' or 'block').
 
     """
-    e = expression(expr).to_mml()
+    e = '' if expr is None else expression(expr).to_mml()
     if display is None:
         return e
     else:
