@@ -1,17 +1,15 @@
 import numbers
 
-def xml_element(tag, *children, text=None, **attributes):
+
+def to_xml_string(tag, text=None, children=None, **attributes):
     if text is None:
         text = ''
-    if attributes == {}:
-        attr = ''
-    else:
-        attr = ' '+' '.join('{}="{}"'.format(k, str(v))
-                            for k, v in attributes.items())
-    if attributes is None:
-        attr = ''
-    s = u'<{0}{1}>{2}{3}</{0}>'.format(tag, attr,
-                                       ''.join(str(c) for c in children),
+    attributes_str = ('' if attributes == {}
+                      else (' '+' '.join('{}="{}"'.format(k, str(v))
+                                         for k, v in attributes.items())))
+    children_str = ('' if children is None
+                    else ''.join(str(c) for c in children))
+    s = u'<{0}{1}>{2}{3}</{0}>'.format(tag, attributes_str, children_str,
                                        str(text))
     return s
 
@@ -25,9 +23,9 @@ class Expression:
         """Return the MathML representation of this object as a string.
 
         """
-        return xml_element(self.tag,
-                           *[to_mml(child) for child in self.children],
-                           **self.attributes)
+        return to_xml_string(self.tag,
+                             children=[to_mml(c) for c in self.children],
+                             **self.attributes)
 
     def __add__(self, other):
         return Plus(self, expression(other))
@@ -71,7 +69,7 @@ class Token(Expression):
         self.attributes = attributes
 
     def to_mml(self):
-        return xml_element(self.tag, text=str(self.value), **self.attributes)
+        return to_xml_string(self.tag, text=str(self.value), **self.attributes)
 
 
 class Identifier(Token):
@@ -261,9 +259,9 @@ def to_mml(expr, display=None):
     if display is None:
         return e
     else:
-        return xml_element('math', e,
-                           xmlns='http://www.w3.org/1998/Math/MathML',
-                           display=str(display))
+        return to_xml_string('math', children=[e],
+                             xmlns='http://www.w3.org/1998/Math/MathML',
+                             display=str(display))
 
 
 if __name__ == '__main__':
