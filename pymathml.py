@@ -226,6 +226,21 @@ class UnderOver(Expression):
         super().__init__(base, underscript, overscript, **attributes)
 
 
+class Table(Expression):
+    tag = 'mtable'
+
+
+class TableRow(Expression):
+    tag = 'mtr'
+
+
+class TableEntry(Expression):
+    tag = 'mtd'
+
+    def __init__(self, entry, **attributes):
+        super().__init__(entry, **attributes)
+
+
 def underbrace(expression, underscript):
     return Under(expression,
                  Under(Operator('&UnderBrace;'),
