@@ -246,13 +246,11 @@ def identifiers(*names, **attributes):
 
 
 def to_mml(expr, display=None):
-    """Return the MathML code for the specified expression.
-
-    The MathML code is returned as an ``ElementTree.Element``.
+    """Return the MathML code for the specified expression, as a string.
 
     If `display` is not ``None``, then the expression is embedded into
     a ``math`` tag, with the specified 'display' attribute (namely:
-    'inline' or 'block').  If `mode` is 'plain', then the returned
+    'inline' or 'block').
 
     """
     e = expression(expr).to_mml()
