@@ -226,6 +226,12 @@ class UnderOver(Expression):
         super().__init__(base, underscript, overscript, **attributes)
 
 
+def underbrace(expression, underscript):
+    return Under(expression,
+                 Under(Operator('&UnderBrace;'),
+                       underscript, accentunder='true'))
+
+
 def expression(expr):
     if isinstance(expr, Expression):
         return expr
@@ -279,10 +285,8 @@ if __name__ == '__main__':
 
     p, i, m, n = identifiers('p', 'i', 'm', 'n')
     expr = Sum(Fenced(2*p[i, n-1]-p[i, 0])**2, Equals(i, 1), m-2)
+    expr = underbrace(expr, 'top-left corner')
 
-    underbrace = Operator('&UnderBrace;')
-    expr = Under(expr,
-                 Under(underbrace, Text('top-left corner', accentunder='true')))
     with open('essai.html', 'w', encoding='utf8') as f:
         f.write('<html><body>')
         f.write(to_mml(expr, display='block'))
