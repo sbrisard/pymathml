@@ -247,6 +247,11 @@ def underbrace(expression, underscript):
                        underscript, accentunder='true'))
 
 
+def table(rows, **attributes):
+    return Table(*[TableRow(*[TableEntry(e) for e in r]) for r in rows],
+                 **attributes)
+
+
 def expression(expr):
     if isinstance(expr, Expression):
         return expr
@@ -255,7 +260,7 @@ def expression(expr):
     elif isinstance(expr, str):
         return Identifier(expr)
     else:
-        raise ValueError()
+        raise ValueError(expr)
 
 
 def identifiers(*names, **attributes):
@@ -284,34 +289,22 @@ def to_mml(expr, display=None):
 
 
 if __name__ == '__main__':
-    one = Number(1)
-    two = Number(2)
-    a = Identifier('a')
-    b = Identifier('b')
-    c = Identifier('c')
-    x = Identifier('x')
-    y = Identifier('y')
-    n = Identifier('n')
-    Delta = b**2-4*a*'c'
-    #expr = x[1, 2]+SubSup(y, 1, 2)+Frac(b-Root(Delta, 2), 2*a)
-    #expr = (a(x, y)+b[4, 5]+x+y-x-3*y*a)**2
-    #expr = Frac(+b-Sqrt(b**2-4*a*c), a)
-    expr = Sum(Frac(1, n**2), 1, 'N')
-
     p, i, j, m, n = identifiers('p', 'i', 'j', 'm', 'n')
-    Ep = Identifier('E')['p']
-    row1 = TableRow(TableEntry(Row(Ep(p), Operator('='))),
-                    TableEntry(underbrace(Fenced(p[m-1, 0]-p[0, 0])**2
-                                          + Fenced(p[0, n-1]-p[0, 0])**2,
-                                          'top-left corner')))
-    row2 = TableRow(TableEntry(None),
-                    TableEntry(underbrace(Fenced(p[0, 0]-p[0, n-1])**2
-                                          + Fenced(p[m-1, n-1]-p[0, n-1])**2,
-                                          'top-right corner')))
-    table = Table(row1, row2, columnspacing='0em', columnalign='right left',
-                  displaystyle='true')
+    Ep = Identifier('E')[Text('p')]
+
+    lhs = Row(Ep(p), Operator('='))
+    rhs1 = underbrace(Fenced(p[m-1, 0]-p[0, 0])**2
+                      + Fenced(p[0, n-1]-p[0, 0])**2,
+                      'top-left corner')
+    rhs2 = +underbrace(Fenced(p[0, 0]-p[0, n-1])**2
+                       + Fenced(p[m-1, n-1]-p[0, n-1])**2,
+                       'top-right corner')
+    t = table([[lhs, rhs1], [None, rhs2]],
+              columnspacing='0em',
+              columnalign='right left',
+              displaystyle='true')
 
     with open('essai.html', 'w', encoding='utf8') as f:
         f.write('<html><body>')
-        f.write(to_mml(table, display='block'))
+        f.write(to_mml(t, display='block'))
         f.write('</body></html>')
