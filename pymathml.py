@@ -46,7 +46,8 @@ class Expression:
         return Times(expression(other), self)
 
     def __pow__(self, other):
-        return Sup(self, expression(other))
+        return Sup(Fenced(self) if requires_fences(self) else self,
+                   expression(other))
 
     def __neg__(self):
         return Neg(self)
