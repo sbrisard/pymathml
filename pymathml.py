@@ -46,8 +46,7 @@ class Expression:
         return Times(expression(other), self)
 
     def __pow__(self, other):
-        return Sup(Fenced(self) if requires_fences(self) else self,
-                   expression(other))
+        return Sup(self, expression(other))
 
     def __neg__(self):
         return Neg(self)
@@ -302,9 +301,11 @@ if __name__ == '__main__':
     Ep = Identifier('E')[Text('p')]
 
     lhs = Row(Ep(p), Operator('='))
-    rhs1 = underbrace((p[m-1, 0]-p[0, 0])**2+(p[0, n-1]-p[0, 0])**2,
+    rhs1 = underbrace(Fenced(p[m-1, 0]-p[0, 0])**2
+                      +Fenced(p[0, n-1]-p[0, 0])**2,
                       'top-left corner')
-    rhs2 = +underbrace((p[0, 0]-p[0, n-1])**2+(p[m-1, n-1]-p[0, n-1])**2,
+    rhs2 = +underbrace(Fenced(p[0, 0]-p[0, n-1])**2
+                       +Fenced(p[m-1, n-1]-p[0, n-1])**2,
                        'top-right corner')
     t = table([[lhs, rhs1], [None, rhs2]],
               columnspacing='0em',
