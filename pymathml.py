@@ -14,19 +14,32 @@ def to_xml_string(tag, text=None, children=None, **attributes):
     return s
 
 
-class Expression:
-    def __init__(self, *expressions, **attributes):
-        self.children = expressions
-        self.attributes = attributes
+class BaseExpression:
+    """Base class for MathML expressions.
 
-    def to_mml(self):
-        """Return the MathML representation of this object as a string.
+    This class defines all magical functions that allow instances to
+    behave almost like true mathematical expression. One notable
+    exception is automatic parenthetizing, which is *not*
+    implemented. Therefore, this code:
 
-        """
-        return to_xml_string(self.tag,
-                             children=[to_mml(c) for c in self.children],
-                             **self.attributes)
+        a, b = identifiers('a', 'b')
+        (a+b)**2
 
+    would be translated to the following MathML
+
+        <mrow><mi>a</mi><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow>
+
+    which in fact renders as
+
+        a+b²
+
+    This class should *not* be instantiated directly. Use derived
+    classes instead.
+
+    Developers should note that derived classes *must* implement a
+    to_mml function.
+
+    """
     def __add__(self, other):
         return Plus(self, expression(other))
 
@@ -63,13 +76,31 @@ class Expression:
         return Row(self, Operator('&ApplyFunction;'), Fenced(*args))
 
 
-class Token(Expression):
+class Token(BaseExpression):
+    """Token elements in the sense of the MathML specifications (§3.1.9.1).
+
+
+    """
     def __init__(self, value, **attributes):
         self.value = value
         self.attributes = attributes
 
     def to_mml(self):
         return to_xml_string(self.tag, text=str(self.value), **self.attributes)
+
+
+class Expression(BaseExpression):
+    def __init__(self, *expressions, **attributes):
+        self.children = expressions
+        self.attributes = attributes
+
+    def to_mml(self):
+        """Return the MathML representation of this object as a string.
+
+        """
+        return to_xml_string(self.tag,
+                             children=[to_mml(c) for c in self.children],
+                             **self.attributes)
 
 
 class Identifier(Token):
@@ -261,7 +292,7 @@ def requires_fences(expr):
 
 
 def expression(expr):
-    if isinstance(expr, Expression):
+    if isinstance(expr, BaseExpression):
         return expr
     elif isinstance(expr, numbers.Number):
         return Number(expr)
