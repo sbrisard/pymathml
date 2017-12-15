@@ -91,7 +91,7 @@ class Token(BaseExpression):
 
 class Expression(BaseExpression):
     def __init__(self, *expressions, **attributes):
-        self.children = expressions
+        self.children = [expression(e) for e in expressions]
         self.attributes = attributes
 
     def to_mml(self):
