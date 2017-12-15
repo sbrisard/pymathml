@@ -282,14 +282,6 @@ def table(rows, **attributes):
                  **attributes)
 
 
-def requires_fences(expr):
-    if isinstance(expr, Token):
-        return False
-    if isinstance(expr, Fenced):
-        return False
-    return True
-
-
 def expression(expr):
     if expr is None:
         return None
