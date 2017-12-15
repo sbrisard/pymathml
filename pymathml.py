@@ -292,7 +292,9 @@ def requires_fences(expr):
 
 
 def expression(expr):
-    if isinstance(expr, BaseExpression):
+    if expr is None:
+        return None
+    elif isinstance(expr, BaseExpression):
         return expr
     elif isinstance(expr, numbers.Number):
         return Number(expr)
