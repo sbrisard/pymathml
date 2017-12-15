@@ -41,25 +41,25 @@ class BaseExpression:
 
     """
     def __add__(self, other):
-        return Plus(self, expression(other))
+        return Plus(self, other)
 
     def __radd__(self, other):
-        return Plus(expression(other), self)
+        return Plus(other, self)
 
     def __sub__(self, other):
-        return Minus(self, expression(other))
+        return Minus(self, other)
 
     def __rsub__(self, other):
-        return Minus(expression(other), self)
+        return Minus(other, self)
 
     def __mul__(self, other):
-        return Times(self, expression(other))
+        return Times(self, other)
 
     def __rmul__(self, other):
-        return Times(expression(other), self)
+        return Times(other, self)
 
     def __pow__(self, other):
-        return Sup(self, expression(other))
+        return Sup(self, other)
 
     def __neg__(self):
         return Neg(self)
@@ -69,7 +69,7 @@ class BaseExpression:
 
     def __getitem__(self, key):
         subscript = (Fenced(*key, open='', close='')
-                     if isinstance(key, tuple) else expression(key))
+                     if isinstance(key, tuple) else key)
         return Sub(self, subscript)
 
     def __call__(self, *args):
