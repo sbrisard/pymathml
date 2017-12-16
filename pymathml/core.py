@@ -38,7 +38,6 @@ class BaseExpression:
 
     Developers should note that derived classes *must* implement a
     to_mml function.
-
     """
     def __add__(self, other):
         return Plus(self, other)
@@ -77,10 +76,7 @@ class BaseExpression:
 
 
 class Token(BaseExpression):
-    """Token elements in the sense of the MathML specifications (§3.1.9.1).
-
-
-    """
+    """Token elements in the sense of the MathML specifications (§3.1.9.1)."""
     def __init__(self, value, **attributes):
         self.value = value
         self.attributes = attributes
@@ -95,9 +91,7 @@ class Expression(BaseExpression):
         self.attributes = attributes
 
     def to_mml(self):
-        """Return the MathML representation of this object as a string.
-
-        """
+        """Return the MathML representation of this object as a string."""
         return to_xml_string(self.tag,
                              children=[to_mml(c) for c in self.children],
                              **self.attributes)
@@ -299,7 +293,6 @@ def to_mml(expr, display=None):
     If `display` is not ``None``, then the expression is embedded into
     a ``math`` tag, with the specified 'display' attribute (namely:
     'inline' or 'block').
-
     """
     e = '' if expr is None else expression(expr).to_mml()
     if display is None:
