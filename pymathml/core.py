@@ -272,11 +272,6 @@ class TableEntry(Expression):
         super().__init__(entry, **attributes)
 
 
-def underbrace(expr, underscript):
-    return Under(expr, Under(Operator('&UnderBrace;'), underscript,
-                             accentunder='true'))
-
-
 def expression(expr):
     if expr is None:
         return None
