@@ -2,7 +2,7 @@ import re
 
 from setuptools import setup
 
-with open('pymathml/pymathml.py', 'r') as f:
+with open('pymathml/__init__.py', 'r') as f:
     lines = f.read()
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         lines, re.MULTILINE).group(1)
@@ -21,7 +21,7 @@ setup(
     url='',
     author=author,
     author_email='',
-    py_modules=['pymathml'],
+    packages=['pymathml'],
     license='BSD-3',
     classifiers=['Development Status :: 4 - Beta',
                  'Intended Audience :: Developers',
