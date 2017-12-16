@@ -277,11 +277,6 @@ def underbrace(expr, underscript):
                              accentunder='true'))
 
 
-def table(rows, **attributes):
-    return Table(*[TableRow(*[TableEntry(e) for e in r]) for r in rows],
-                 **attributes)
-
-
 def expression(expr):
     if expr is None:
         return None
