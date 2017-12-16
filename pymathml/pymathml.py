@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
+u"""Create MathML expressions programatically with Python.
+
+"""
 import numbers
+
+__author__ = 'Sebastien Brisard'
+__version__ = '0.0'
+__release__ = __version__
 
 
 def to_xml_string(tag, text=None, children=None, **attributes):
