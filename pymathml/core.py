@@ -18,11 +18,12 @@ class BaseExpression:
     """Base class for MathML expressions.
 
     This class defines all magical functions that allow instances to
-    behave almost like true mathematical expression. One notable
+    behave almost like true mathematical expressions. One notable
     exception is automatic parenthetizing, which is *not*
     implemented. Therefore, this code:
 
-        a, b = identifiers('a', 'b')
+        a = Identifier('a')
+        b = Identifier('b')
         (a+b)**2
 
     would be translated to the following MathML
@@ -33,11 +34,12 @@ class BaseExpression:
 
         a+b²
 
-    This class should *not* be instantiated directly. Use derived
-    classes instead.
+    This class does not provide an initializer and should *not* be
+    instantiated directly. Use derived classes instead.
 
     Developers should note that derived classes *must* implement a
     to_mml function.
+
     """
     def __add__(self, other):
         return Plus(self, other)
