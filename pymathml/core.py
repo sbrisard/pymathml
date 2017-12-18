@@ -18,8 +18,29 @@ class BaseExpression:
     """Base class for MathML expressions.
 
     This class defines all magical functions that allow instances to
-    behave almost like true mathematical expressions. One notable
-    exception is automatic parenthetizing, which is *not*
+    behave almost like true mathematical expressions (see table
+    below).
+
+    Python-to-MathML conversion guide:
+
+    In the table below, ``e``, ``e1`` and ``e2`` are PyMathML
+    expressions, ``me``, ``me1`` and ``me2`` are there translation to
+    MathML, resulting from a call to ``to_mathml``.
+
+    ========== ======================================================
+    Python           MathML
+    ========== ======================================================
+    ``+e``     ``<mrow><mo>+</mo>me</mrow>``
+    ``-e``     ``<mrow><mo>-</mo>me</mrow>``
+    ``e1+e2``  ``<mrow>me1<mo>+</mo>me2</mrow>``
+    ``e1-e2``  ``<mrow>me1<mo>-</mo>me2</mrow>``
+    ``e1*e2``  ``<mrow>me1<mo>&it;</mo>me2</mrow>``
+    ``e1**e2`` ``<msup>me1 me2</msup>``
+    ``e1[e2]`` ``<msub>me1 me2</msub>``
+    ``e1(e2)`` ``<mrow>me1<mo>&af;</mo><mfenced>e2</mfenced></mrow>``
+    ========== ======================================================
+
+    One notable exception is automatic parenthetizing, which is *not*
     implemented. Therefore, this code:
 
         a = Identifier('a')
