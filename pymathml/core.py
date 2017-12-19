@@ -28,7 +28,7 @@ class BaseExpression:
     MathML, resulting from a call to ``to_mathml``.
 
     ========== ======================================================
-    Python           MathML
+    Python     MathML
     ========== ======================================================
     ``+e``     ``<mrow><mo>+</mo>me</mrow>``
     ``-e``     ``<mrow><mo>-</mo>me</mrow>``
@@ -84,8 +84,30 @@ class BaseExpression:
 
 
 class Token(BaseExpression):
-    """Token elements in the sense of the MathML specifications (§3.1.9.1)."""
+    """Token elements (see MathML specs, sec. 3.1.9.1).
+
+    This class should *not* be instanciated directly. Use derived
+    classes instead (listed below, together with their MathML
+    translation).
+
+    ================= ====================
+    PyMathML          MathML
+    ================= ====================
+    Identifier        <mi>...</mi>
+    Number            <mn>...</mn>
+    Operator          <mo>...</mo>
+    Text              <mtext>...</mtext>
+    *not implemented* <mspace>...</mspace>
+    *not implemented* <ms>...</ms>
+    ================= ====================
+    """
     def __init__(self, value, **attributes):
+        """Initialize token element.
+
+        The `value` of this token must provide a ``__str__`` method as
+        it will be called to produce the text of the MathML token
+        element.
+        """
         self.value = value
         self.attributes = attributes
 
