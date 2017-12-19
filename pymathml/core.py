@@ -24,7 +24,7 @@ class BaseExpression:
     Python-to-MathML conversion guide:
 
     In the table below, ``e``, ``e1`` and ``e2`` are PyMathML
-    expressions, ``me``, ``me1`` and ``me2`` are there translation to
+    expressions, ``me``, ``me1`` and ``me2`` are their translation to
     MathML, resulting from a call to ``to_mathml``.
 
     ========== ======================================================
