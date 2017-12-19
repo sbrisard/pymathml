@@ -40,21 +40,6 @@ class BaseExpression:
     ``e1(e2)`` ``<mrow>me1<mo>&af;</mo><mfenced>e2</mfenced></mrow>``
     ========== ======================================================
 
-    One notable exception is automatic parenthetizing, which is *not*
-    implemented. Therefore, this code:
-
-        a = Identifier('a')
-        b = Identifier('b')
-        (a+b)**2
-
-    would be translated to the following MathML
-
-        <mrow><mi>a</mi><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow>
-
-    which in fact renders as
-
-        a+b²
-
     This class does not provide an initializer and should *not* be
     instantiated directly. Use derived classes instead.
 
