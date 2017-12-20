@@ -162,7 +162,7 @@ class Operator(Token):
 
 
 class Text(Token):
-    """PyMathML implementation of the ``mo`` token element.
+    """PyMathML implementation of the ``motext`` token element.
 
     See MathML specifications, section 3.2.6.
 
