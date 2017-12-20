@@ -84,7 +84,7 @@ class BaseExpression:
 
 
 class Token(BaseExpression):
-    """Token elements (see MathML specs, sec. 3.1.9.1).
+    """Token elements (see MathML specifications, section 3.1.9.1).
 
     This class should *not* be instanciated directly. Use derived
     classes instead (listed below, together with their MathML
@@ -104,9 +104,9 @@ class Token(BaseExpression):
     def __init__(self, value, **attributes):
         """Initialize token element.
 
-        The `value` of this token must provide a ``__str__`` method as
-        it will be called to produce the text of the MathML token
-        element.
+        The text of the resulting MathML token element is
+        ``str(value)``.
+
         """
         self.value = value
         self.attributes = attributes
@@ -128,18 +128,42 @@ class Expression(BaseExpression):
 
 
 class Identifier(Token):
+    """PyMathML implementation of the ``mi`` token element.
+
+    See MathML specifications, sec 3.2.3.
+
+    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mi
+    """
     tag = 'mi'
 
 
 class Number(Token):
+    """PyMathML implementation of the ``mn`` token element.
+
+    See MathML specifications, section 3.2.4.
+
+    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mn
+    """
     tag = 'mn'
 
 
 class Operator(Token):
+    """PyMathML implementation of the ``mo`` token element.
+
+    See MathML specifications, section 3.2.5.
+
+    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mo
+    """
     tag = 'mo'
 
 
 class Text(Token):
+    """PyMathML implementation of the ``mo`` token element.
+
+    See MathML specifications, section 3.2.6.
+
+    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mtext
+    """
     tag = 'mtext'
 
 
