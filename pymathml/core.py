@@ -45,8 +45,8 @@ class BaseExpression:
 
     Developers should note that derived classes *must* implement a
     to_mml function.
-
     """
+
     def __add__(self, other):
         return Plus(self, other)
 
@@ -101,6 +101,7 @@ class Token(BaseExpression):
     *not implemented* <ms>...</ms>
     ================= ====================
     """
+
     def __init__(self, value, **attributes):
         """Initialize token element.
 
@@ -134,6 +135,7 @@ class Identifier(Token):
 
     https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mi
     """
+
     tag = 'mi'
 
 
@@ -144,6 +146,7 @@ class Number(Token):
 
     https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mn
     """
+
     tag = 'mn'
 
 
@@ -154,6 +157,7 @@ class Operator(Token):
 
     https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mo
     """
+
     tag = 'mo'
 
 
@@ -164,6 +168,7 @@ class Text(Token):
 
     https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mtext
     """
+
     tag = 'mtext'
 
 
