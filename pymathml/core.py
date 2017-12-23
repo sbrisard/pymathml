@@ -117,6 +117,54 @@ class Token(BaseExpression):
 
 
 class Expression(BaseExpression):
+    """Base class for non-token elements.
+
+    This class should *not* be instanciated directly. Use derived
+    classes instead (listed below, together with their MathML
+    translation).
+
+    General Layout Schemata
+    -----------------------
+
+    See MathML specifications, section 3.1.9.2.
+
+    https://www.w3.org/TR/MathML3/chapter3.html#id.3.1.9.2
+
+    ======== =================
+    MathML   PyMathML
+    ======== =================
+    mrow     Row
+    mfrac    Frac
+    msqrt    Sqrt
+    mroot    Root
+    mstyle   Style
+    merror   *not implemented*
+    mpadded  *not implemented*
+    mphantom *not implemented*
+    mfenced  Fenced
+    menclose *not implemented*
+    ======== =================
+
+
+    Script and Limit Schemata
+    -------------------------
+
+    See MathML specifications, section 3.1.9.3.
+
+    https://www.w3.org/TR/MathML3/chapter3.html#id.3.1.9.3
+
+    ============= =================
+    MathML        PyMathML
+    ============= =================
+    msub          Sub
+    msup          Sup
+    msubsup       SubSup
+    munder        Under
+    mover         Over
+    munderover    UnderOver
+    mmultiscripts *not implemented*
+    ============= =================
+    """
     def __init__(self, *expressions, **attributes):
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
