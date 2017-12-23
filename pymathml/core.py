@@ -119,6 +119,12 @@ class Token(BaseExpression):
 class Expression(BaseExpression):
     """Base class for non-token elements.
 
+    This class is the base class for the following element types
+
+      - general layout schemata,
+      - script and limit schemata,
+      - tables and matrices.
+
     This class should *not* be instanciated directly. Use derived
     classes instead (listed below, together with their MathML
     translation).
@@ -127,8 +133,6 @@ class Expression(BaseExpression):
     -----------------------
 
     See MathML specifications, section 3.1.9.2.
-
-    https://www.w3.org/TR/MathML3/chapter3.html#id.3.1.9.2
 
     ======== =================
     MathML   PyMathML
@@ -145,13 +149,10 @@ class Expression(BaseExpression):
     menclose *not implemented*
     ======== =================
 
-
     Script and Limit Schemata
     -------------------------
 
     See MathML specifications, section 3.1.9.3.
-
-    https://www.w3.org/TR/MathML3/chapter3.html#id.3.1.9.3
 
     ============= =================
     MathML        PyMathML
@@ -164,13 +165,34 @@ class Expression(BaseExpression):
     munderover    UnderOver
     mmultiscripts *not implemented*
     ============= =================
+
+    Tables and matrices
+    -------------------
+
+    See MathML specifications, section 3.1.9.4.
+
+    =========== =================
+    MathML      PyMathML
+    =========== =================
+    mtable      Table
+    mlabeledtr  *not implemented*
+    mtr         TableRow
+    mtd         TableEntry
+    maligngroup *not implemented*
+    malignmark  *not implemented*
+    =========== =================
     """
     def __init__(self, *expressions, **attributes):
+        """Initialize expression.
+
+        ``*expressions`` are the children of the resulting MathML
+        element. They are automatically converted to ``Expression``
+        using the function ``expression``.
+        """
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
 
     def to_mml(self):
-        """Return the MathML representation of this object as a string."""
         return to_xml_string(self.tag,
                              children=[to_mml(c) for c in self.children],
                              **self.attributes)
