@@ -206,9 +206,7 @@ class Expression(BaseExpression):
 class Identifier(Token):
     """PyMathML implementation of the ``mi`` token element.
 
-    See MathML specifications, sec 3.2.3.
-
-    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mi
+    See MathML specifications, section 3.2.3.
     """
 
     tag = 'mi'
@@ -218,8 +216,6 @@ class Number(Token):
     """PyMathML implementation of the ``mn`` token element.
 
     See MathML specifications, section 3.2.4.
-
-    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mn
     """
 
     tag = 'mn'
@@ -229,8 +225,6 @@ class Operator(Token):
     """PyMathML implementation of the ``mo`` token element.
 
     See MathML specifications, section 3.2.5.
-
-    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mo
     """
 
     tag = 'mo'
@@ -240,8 +234,6 @@ class Text(Token):
     """PyMathML implementation of the ``motext`` token element.
 
     See MathML specifications, section 3.2.6.
-
-    https://www.w3.org/TR/2014/REC-MathML3-20140410/chapter3.html#presm.mtext
     """
 
     tag = 'mtext'
