@@ -82,6 +82,11 @@ class BaseExpression:
     def __call__(self, *args):
         return Row(self, Operator('&ApplyFunction;'), Fenced(*args))
 
+    def to_mml(self):
+        """Return the MathML representation of this object as a string."""
+        raise NotImplementedError('sub-classes of BaseExpression should'
+                                  ' implement this method')
+
 
 class Token(BaseExpression):
     """Token elements (see MathML specifications, section 3.1.9.1).
