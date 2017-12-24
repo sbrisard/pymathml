@@ -297,6 +297,63 @@ class Fenced(Expression):
     tag = 'mfenced'
 
 
+class Sub(Expression):
+    tag = 'msub'
+
+    def __init__(self, base, subscript, **attributes):
+        super().__init__(base, subscript, **attributes)
+
+
+class Sup(Expression):
+    tag = 'msup'
+
+    def __init__(self, base, superscript, **attributes):
+        super().__init__(base, superscript, **attributes)
+
+
+class SubSup(Expression):
+    tag = 'msubsup'
+
+    def __init__(self, base, subscript, superscript, **attributes):
+        super().__init__(base, subscript, superscript, **attributes)
+
+
+class Under(Expression):
+    tag = 'munder'
+
+    def __init__(self, base, underscript, **attributes):
+        super().__init__(base, underscript, **attributes)
+
+
+class Over(Expression):
+    tag = 'mover'
+
+    def __init__(self, base, overscript, **attributes):
+        super().__init__(base, overscript, **attributes)
+
+
+class UnderOver(Expression):
+    tag = 'munderover'
+
+    def __init__(self, base, underscript, overscript, **attributes):
+        super().__init__(base, underscript, overscript, **attributes)
+
+
+class Table(Expression):
+    tag = 'mtable'
+
+
+class TableRow(Expression):
+    tag = 'mtr'
+
+
+class TableEntry(Expression):
+    tag = 'mtd'
+
+    def __init__(self, entry, **attributes):
+        super().__init__(entry, **attributes)
+
+
 class BinaryOperation(Expression):
     def to_mml(self):
         children = [self.children[0]]
@@ -358,63 +415,6 @@ class Times(BinaryOperation):
 
 class Sum(NaryOperation):
     op = Operator('&Sum;')
-
-
-class Sub(Expression):
-    tag = 'msub'
-
-    def __init__(self, base, subscript, **attributes):
-        super().__init__(base, subscript, **attributes)
-
-
-class Sup(Expression):
-    tag = 'msup'
-
-    def __init__(self, base, superscript, **attributes):
-        super().__init__(base, superscript, **attributes)
-
-
-class SubSup(Expression):
-    tag = 'msubsup'
-
-    def __init__(self, base, subscript, superscript, **attributes):
-        super().__init__(base, subscript, superscript, **attributes)
-
-
-class Under(Expression):
-    tag = 'munder'
-
-    def __init__(self, base, underscript, **attributes):
-        super().__init__(base, underscript, **attributes)
-
-
-class Over(Expression):
-    tag = 'mover'
-
-    def __init__(self, base, overscript, **attributes):
-        super().__init__(base, overscript, **attributes)
-
-
-class UnderOver(Expression):
-    tag = 'munderover'
-
-    def __init__(self, base, underscript, overscript, **attributes):
-        super().__init__(base, underscript, overscript, **attributes)
-
-
-class Table(Expression):
-    tag = 'mtable'
-
-
-class TableRow(Expression):
-    tag = 'mtr'
-
-
-class TableEntry(Expression):
-    tag = 'mtd'
-
-    def __init__(self, entry, **attributes):
-        super().__init__(entry, **attributes)
 
 
 def expression(expr):
