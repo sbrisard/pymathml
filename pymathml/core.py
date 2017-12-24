@@ -298,6 +298,11 @@ class Fenced(Expression):
 
 
 class Sub(Expression):
+    """PyMathML implementation of the ``msub`` element.
+
+    See MathML specifications, section 3.4.1.
+    """
+
     tag = 'msub'
 
     def __init__(self, base, subscript, **attributes):
@@ -305,6 +310,11 @@ class Sub(Expression):
 
 
 class Sup(Expression):
+    """PyMathML implementation of the ``msup`` element.
+
+    See MathML specifications, section 3.4.2.
+    """
+
     tag = 'msup'
 
     def __init__(self, base, superscript, **attributes):
@@ -312,6 +322,11 @@ class Sup(Expression):
 
 
 class SubSup(Expression):
+    """PyMathML implementation of the ``msubsup`` element.
+
+    See MathML specifications, section 3.4.3.
+    """
+
     tag = 'msubsup'
 
     def __init__(self, base, subscript, superscript, **attributes):
@@ -319,6 +334,11 @@ class SubSup(Expression):
 
 
 class Under(Expression):
+    """PyMathML implementation of the ``munder`` element.
+
+    See MathML specifications, section 3.4.4.
+    """
+
     tag = 'munder'
 
     def __init__(self, base, underscript, **attributes):
@@ -326,6 +346,11 @@ class Under(Expression):
 
 
 class Over(Expression):
+    """PyMathML implementation of the ``mover`` element.
+
+    See MathML specifications, section 3.4.5.
+    """
+
     tag = 'mover'
 
     def __init__(self, base, overscript, **attributes):
@@ -333,6 +358,11 @@ class Over(Expression):
 
 
 class UnderOver(Expression):
+    """PyMathML implementation of the ``munderover`` element.
+
+    See MathML specifications, section 3.4.6.
+    """
+
     tag = 'munderover'
 
     def __init__(self, base, underscript, overscript, **attributes):
@@ -340,14 +370,29 @@ class UnderOver(Expression):
 
 
 class Table(Expression):
+    """PyMathML implementation of the ``mtable`` element.
+
+    See MathML specifications, section 3.5.1.
+    """
+
     tag = 'mtable'
 
 
 class TableRow(Expression):
+    """PyMathML implementation of the ``mtr`` element.
+
+    See MathML specifications, section 3.5.2.
+    """
+
     tag = 'mtr'
 
 
 class TableEntry(Expression):
+    """PyMathML implementation of the ``mtd`` element.
+
+    See MathML specifications, section 3.5.4.
+    """
+
     tag = 'mtd'
 
     def __init__(self, entry, **attributes):
