@@ -18,8 +18,7 @@ class BaseExpression:
     """Base class for MathML expressions.
 
     This class defines all magical functions that allow instances to
-    behave almost like true mathematical expressions (see table
-    below).
+    behave almost like true mathematical expressions (see table below).
 
     Python-to-MathML conversion guide:
 
@@ -42,9 +41,6 @@ class BaseExpression:
 
     This class does not provide an initializer and should *not* be
     instantiated directly. Use derived classes instead.
-
-    Developers should note that derived classes *must* implement a
-    to_mml function.
     """
 
     def __add__(self, other):
@@ -110,9 +106,7 @@ class Token(BaseExpression):
     def __init__(self, value, **attributes):
         """Initialize token element.
 
-        The text of the resulting MathML token element is
-        ``str(value)``.
-
+        The text of the resulting MathML token element is ``str(value)``.
         """
         self.value = value
         self.attributes = attributes
@@ -193,6 +187,7 @@ class Expression(BaseExpression):
         ``*expressions`` are the children of the resulting MathML
         element. They are automatically converted to ``Expression``
         using the function ``expression``.
+
         """
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
@@ -427,3 +422,7 @@ def to_mml(expr, display=None):
         return to_xml_string('math', children=[e],
                              xmlns='http://www.w3.org/1998/Math/MathML',
                              display=str(display))
+
+# Local Variables:
+# fill-column: 72
+# End:
