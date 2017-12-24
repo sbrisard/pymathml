@@ -235,10 +235,20 @@ class Text(Token):
 
 
 class Row(Expression):
+    """PyMathML implementation of the ``mrow`` element.
+
+    See MathML specifications, section 3.3.1.
+    """
+
     tag = 'mrow'
 
 
 class Frac(Expression):
+    """PyMathML implementation of the ``mfrac`` element.
+
+    See MathML specifications, section 3.3.2.
+    """
+
     tag = 'mfrac'
 
     def __init__(self, numerator, denominator, **attributes):
@@ -246,6 +256,11 @@ class Frac(Expression):
 
 
 class Sqrt(Expression):
+    """PyMathML implementation of the ``msqrt`` element.
+
+    See MathML specifications, section 3.3.3.
+    """
+
     tag = 'msqrt'
 
     def __init__(self, base, **attributes):
@@ -253,6 +268,11 @@ class Sqrt(Expression):
 
 
 class Root(Expression):
+    """PyMathML implementation of the ``mroot`` element.
+
+    See MathML specifications, section 3.3.3.
+    """
+
     tag = 'mroot'
 
     def __init__(self, base, index, **attributes):
@@ -260,10 +280,20 @@ class Root(Expression):
 
 
 class Style(Expression):
+    """PyMathML implementation of the ``mstyle`` element.
+
+    See MathML specifications, section 3.3.4.
+    """
+
     tag = 'mstyle'
 
 
 class Fenced(Expression):
+    """PyMathML implementation of the ``mfenced`` element.
+
+    See MathML specifications, section 3.3.8.
+    """
+
     tag = 'mfenced'
 
 
