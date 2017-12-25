@@ -198,40 +198,21 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
-class Identifier(Token):
-    """PyMathML implementation of the ``mi`` token element.
+def create_token(name, tag, section):
+    """Return a class derived from ``Token``
 
-    See MathML specifications, section 3.2.3.
+    TODO Docstring
     """
-
-    tag = 'mi'
-
-
-class Number(Token):
-    """PyMathML implementation of the ``mn`` token element.
-
-    See MathML specifications, section 3.2.4.
-    """
-
-    tag = 'mn'
+    docstring = ('PyMathML implementation of the ``{}`` element.\n\n'
+                 'See MathML specifications, section {}.')
+    return type(name, (Token,),
+                {'tag': tag, '__doc__': docstring.format(tag, section)})
 
 
-class Operator(Token):
-    """PyMathML implementation of the ``mo`` token element.
-
-    See MathML specifications, section 3.2.5.
-    """
-
-    tag = 'mo'
-
-
-class Text(Token):
-    """PyMathML implementation of the ``mtext`` token element.
-
-    See MathML specifications, section 3.2.6.
-    """
-
-    tag = 'mtext'
+Identifier = create_token('Identifier', 'mi', '3.2.3')
+Number = create_token('Number', 'mn', '3.2.4')
+Operator = create_token('Operator', 'mo', '3.2.5')
+Text = create_token('Text', 'mtext', '3.2.6')
 
 
 class Row(Expression):
