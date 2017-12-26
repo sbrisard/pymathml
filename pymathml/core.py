@@ -198,15 +198,17 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
+__DEFAULT_DOCSTRING = ('PyMathML implementation of the ``{}`` element.\n\n'
+                       'See MathML specifications, section {}.')
+
+
 def create_token(name, tag, section):
     """Return a class derived from ``Token``
 
     TODO Docstring
     """
-    docstring = ('PyMathML implementation of the ``{}`` element.\n\n'
-                 'See MathML specifications, section {}.')
-    return type(name, (Token,),
-                {'tag': tag, '__doc__': docstring.format(tag, section)})
+    docstring = __DEFAULT_DOCSTRING.format(tag, section)
+    return type(name, (Token,), {'tag': tag, '__doc__': docstring})
 
 
 Identifier = create_token('Identifier', 'mi', '3.2.3')
@@ -215,13 +217,13 @@ Operator = create_token('Operator', 'mo', '3.2.5')
 Text = create_token('Text', 'mtext', '3.2.6')
 
 
-class Row(Expression):
-    """PyMathML implementation of the ``mrow`` element.
+def derive_expression(name, tag, section):
+    dict = {'tag': tag,
+            '__doc__': __DEFAULT_DOCSTRING.format(tag, section)}
+    return type(name, (Expression,), dict)
 
-    See MathML specifications, section 3.3.1.
-    """
 
-    tag = 'mrow'
+Row = derive_expression('Row', 'mrow', '3.3.1')
 
 
 class Frac(Expression):
@@ -260,22 +262,8 @@ class Root(Expression):
         super().__init__(base, index, **attributes)
 
 
-class Style(Expression):
-    """PyMathML implementation of the ``mstyle`` element.
-
-    See MathML specifications, section 3.3.4.
-    """
-
-    tag = 'mstyle'
-
-
-class Fenced(Expression):
-    """PyMathML implementation of the ``mfenced`` element.
-
-    See MathML specifications, section 3.3.8.
-    """
-
-    tag = 'mfenced'
+Style = derive_expression('Style', 'mstyle', '3.3.4')
+Fenced = derive_expression('Fenced', 'mfenced', '3.3.8')
 
 
 class Sub(Expression):
@@ -350,22 +338,8 @@ class UnderOver(Expression):
         super().__init__(base, underscript, overscript, **attributes)
 
 
-class Table(Expression):
-    """PyMathML implementation of the ``mtable`` element.
-
-    See MathML specifications, section 3.5.1.
-    """
-
-    tag = 'mtable'
-
-
-class TableRow(Expression):
-    """PyMathML implementation of the ``mtr`` element.
-
-    See MathML specifications, section 3.5.2.
-    """
-
-    tag = 'mtr'
+Table = derive_expression('Table', 'mtable', '3.5.1')
+TableRow = derive_expression('TableRow', 'mtr', '3.5.2')
 
 
 class TableEntry(Expression):
