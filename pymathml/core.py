@@ -265,7 +265,6 @@ class Root(Expression):
 Style = derive_expression('Style', 'mstyle', '3.3.4')
 Fenced = derive_expression('Fenced', 'mfenced', '3.3.8')
 
-
 class Sub(Expression):
     """PyMathML implementation of the ``msub`` element.
 
