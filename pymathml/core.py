@@ -198,8 +198,10 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
-__DEFAULT_DOCSTRING = ('PyMathML implementation of the ``{}`` element.\n\n'
-                       'See MathML specifications, section {}.')
+_DESCRIPTION_DOCSTRING = ('PyMathML implementation of the ``{}`` element.\n\n'
+                          'See MathML specifications, section {}.')
+
+_USAGE_DOCSTRING = ('Usage: ``{}({}, **attributes)``')
 
 
 def create_token(name, tag, section):
@@ -207,7 +209,7 @@ def create_token(name, tag, section):
 
     TODO Docstring
     """
-    docstring = __DEFAULT_DOCSTRING.format(tag, section)
+    docstring = _DESCRIPTION_DOCSTRING.format(tag, section)
     return type(name, (Token,), {'tag': tag, '__doc__': docstring})
 
 
@@ -217,140 +219,33 @@ Operator = create_token('Operator', 'mo', '3.2.5')
 Text = create_token('Text', 'mtext', '3.2.6')
 
 
-def derive_expression(name, tag, section):
-    dict = {'tag': tag,
-            '__doc__': __DEFAULT_DOCSTRING.format(tag, section)}
+def derive_expression(name, tag, section, params=None):
+    doc = _DESCRIPTION_DOCSTRING.format(tag, section)
+    usage = _USAGE_DOCSTRING.format(name, ', '.join(params) if params
+                                    else '*expressions')
+    dict = {'tag': tag, '__doc__': doc+'\n\n'+usage}
     return type(name, (Expression,), dict)
 
 
 Row = derive_expression('Row', 'mrow', '3.3.1')
-
-
-class Frac(Expression):
-    """PyMathML implementation of the ``mfrac`` element.
-
-    See MathML specifications, section 3.3.2.
-    """
-
-    tag = 'mfrac'
-
-    def __init__(self, numerator, denominator, **attributes):
-        super().__init__(numerator, denominator, **attributes)
-
-
-class Sqrt(Expression):
-    """PyMathML implementation of the ``msqrt`` element.
-
-    See MathML specifications, section 3.3.3.
-    """
-
-    tag = 'msqrt'
-
-    def __init__(self, base, **attributes):
-        super().__init__(base, **attributes)
-
-
-class Root(Expression):
-    """PyMathML implementation of the ``mroot`` element.
-
-    See MathML specifications, section 3.3.3.
-    """
-
-    tag = 'mroot'
-
-    def __init__(self, base, index, **attributes):
-        super().__init__(base, index, **attributes)
-
-
+Frac = derive_expression('Frac', 'mfrac', '3.3.2',
+                         ['numerator', 'denominator'])
+Sqrt = derive_expression('Sqrt', 'msqrt', '3.3.3', ['base'])
+Root = derive_expression('Root', 'mroot', '3.3.3', ['base', 'index'])
 Style = derive_expression('Style', 'mstyle', '3.3.4')
 Fenced = derive_expression('Fenced', 'mfenced', '3.3.8')
-
-class Sub(Expression):
-    """PyMathML implementation of the ``msub`` element.
-
-    See MathML specifications, section 3.4.1.
-    """
-
-    tag = 'msub'
-
-    def __init__(self, base, subscript, **attributes):
-        super().__init__(base, subscript, **attributes)
-
-
-class Sup(Expression):
-    """PyMathML implementation of the ``msup`` element.
-
-    See MathML specifications, section 3.4.2.
-    """
-
-    tag = 'msup'
-
-    def __init__(self, base, superscript, **attributes):
-        super().__init__(base, superscript, **attributes)
-
-
-class SubSup(Expression):
-    """PyMathML implementation of the ``msubsup`` element.
-
-    See MathML specifications, section 3.4.3.
-    """
-
-    tag = 'msubsup'
-
-    def __init__(self, base, subscript, superscript, **attributes):
-        super().__init__(base, subscript, superscript, **attributes)
-
-
-class Under(Expression):
-    """PyMathML implementation of the ``munder`` element.
-
-    See MathML specifications, section 3.4.4.
-    """
-
-    tag = 'munder'
-
-    def __init__(self, base, underscript, **attributes):
-        super().__init__(base, underscript, **attributes)
-
-
-class Over(Expression):
-    """PyMathML implementation of the ``mover`` element.
-
-    See MathML specifications, section 3.4.5.
-    """
-
-    tag = 'mover'
-
-    def __init__(self, base, overscript, **attributes):
-        super().__init__(base, overscript, **attributes)
-
-
-class UnderOver(Expression):
-    """PyMathML implementation of the ``munderover`` element.
-
-    See MathML specifications, section 3.4.6.
-    """
-
-    tag = 'munderover'
-
-    def __init__(self, base, underscript, overscript, **attributes):
-        super().__init__(base, underscript, overscript, **attributes)
-
+Sub = derive_expression('Sub', 'msub', '3.4.1', ['base', 'subscript'])
+Sup = derive_expression('Sup', 'msup', '3.4.2', ['base', 'superscript'])
+SubSup = derive_expression('SubSup', 'msubsup', '3.4.3',
+                           ['base', 'subscript', 'superscript'])
+Under = derive_expression('Under', 'munder', '3.4.4', ['base', 'underscript'])
+Over = derive_expression('Over', 'mover', '3.4.5', ['base', 'overscript'])
+UnderOver = derive_expression('UnderOver', 'munderover', '3.4.6',
+                              ['base', 'underscript', 'overscript'])
 
 Table = derive_expression('Table', 'mtable', '3.5.1')
 TableRow = derive_expression('TableRow', 'mtr', '3.5.2')
-
-
-class TableEntry(Expression):
-    """PyMathML implementation of the ``mtd`` element.
-
-    See MathML specifications, section 3.5.4.
-    """
-
-    tag = 'mtd'
-
-    def __init__(self, entry, **attributes):
-        super().__init__(entry, **attributes)
+TableEntry = derive_expression('TableEntry', 'mtd', '3.5.4', ['entry'])
 
 
 class BinaryOperation(Expression):
