@@ -104,10 +104,7 @@ class Token(BaseExpression):
     """
 
     def __init__(self, value, **attributes):
-        """Initialize token element.
-
-        The text of the resulting MathML token element is ``str(value)``.
-        """
+        """Initialize token element."""
         self.value = value
         self.attributes = attributes
 
@@ -198,58 +195,105 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
-_DESCRIPTION_DOCSTRING = ('PyMathML implementation of the ``{}`` element.\n\n'
-                          'See MathML specifications, section {}.')
+#
+# Automatic creation of derived classes
+# =====================================
+#
+_SUMMARY_DOCSTRING = 'PyMathML implementation of the ``{}`` element.'
+_REF_DOCSTRING = 'See MathML specifications, section {}.'
+_USAGE_DOCSTRING = 'Usage: ``{}({}, **attributes)``'
+_TOKEN_SUPPLEMENTARY_DOCSTRING = ('The text of the resulting MathML token '
+                                  'element is ``str(value)``.')
 
-_USAGE_DOCSTRING = ('Usage: ``{}({}, **attributes)``')
 
+def pymathml_type(name, base, tag, section, params=None, suppl_doc=''):
+    """Return a class derived from ``base``.
 
-def create_token(name, tag, section):
-    """Return a class derived from ``Token``
+    The returned class is named ``name``. The docstring refers to the
+    specified ``section`` of the MathML specifications. The "usage"
+    section of the docstring lists the ``params`` of the initializer
+    (``*expressions`` if not specified).
 
-    TODO Docstring
+    A supplementary docstring can also be specified.
     """
-    docstring = _DESCRIPTION_DOCSTRING.format(tag, section)
-    return type(name, (Token,), {'tag': tag, '__doc__': docstring})
-
-
-def derive_expression(name, tag, section, params=None):
-    doc = _DESCRIPTION_DOCSTRING.format(tag, section)
+    summary = _SUMMARY_DOCSTRING.format(tag)
+    ref = _REF_DOCSTRING.format(section) if section else ''
     usage = _USAGE_DOCSTRING.format(name, ', '.join(params) if params
                                     else '*expressions')
-    dict = {'tag': tag, '__doc__': doc+'\n\n'+usage}
-    return type(name, (Expression,), dict)
+    return type(name, (base,), {'tag': tag,
+                                '__doc__': '\n\n'.join([summary, ref, usage,
+                                                        suppl_doc])})
 
 
-# Token elements
-Identifier = create_token('Identifier', 'mi', '3.2.3')
-Number = create_token('Number', 'mn', '3.2.4')
-Operator = create_token('Operator', 'mo', '3.2.5')
-Text = create_token('Text', 'mtext', '3.2.6')
+def token_type(name, tag, section):
+    """Return a class derived from ``Token``.
 
+    The returned class is named ``name``. The docstring refers to the
+    specified ``section`` of the MathML specifications.
+    """
+    # doc = _DESCRIPTION_DOCSTRING.format(tag, section)
+    # usage = _USAGE_DOCSTRING.format(name, 'value')
+    # usage += ('\n\n)
+    # return type(name, (Token,), {'tag': tag, '__doc__': doc+'\n\n'+usage})
+    return pymathml_type(name, Token, tag, section, params=['value'],
+                         suppl_doc=_TOKEN_SUPPLEMENTARY_DOCSTRING)
+
+
+def expression_type(name, tag, section, params=None):
+    """Return a class derived from ``Expression``.
+
+    The returned class is named ``name``. The docstring refers to the
+    specified ``section`` of the MathML specifications. The "usage"
+    section of the docstring lists the ``params`` of the initializer
+    (``*expressions`` if not specified).
+    """
+    return pymathml_type(name, Expression, tag, section, params=params)
+
+
+#
+# Creation of classes derived from Token
+# ======================================
+#
+Identifier = token_type('Identifier', 'mi', '3.2.3')
+Number = token_type('Number', 'mn', '3.2.4')
+Operator = token_type('Operator', 'mo', '3.2.5')
+Text = token_type('Text', 'mtext', '3.2.6')
+
+#
+# Creation of classes derived from Expression
+# ===========================================
+#
 # General layout schemata
-Row = derive_expression('Row', 'mrow', '3.3.1')
-Frac = derive_expression('Frac', 'mfrac', '3.3.2',
-                         ['numerator', 'denominator'])
-Sqrt = derive_expression('Sqrt', 'msqrt', '3.3.3', ['base'])
-Root = derive_expression('Root', 'mroot', '3.3.3', ['base', 'index'])
-Style = derive_expression('Style', 'mstyle', '3.3.4')
-Fenced = derive_expression('Fenced', 'mfenced', '3.3.8')
+# -----------------------
+#
+Row = expression_type('Row', 'mrow', '3.3.1')
+Frac = expression_type('Frac', 'mfrac', '3.3.2',
+                       ['numerator', 'denominator'])
+Sqrt = expression_type('Sqrt', 'msqrt', '3.3.3', ['base'])
+Root = expression_type('Root', 'mroot', '3.3.3', ['base', 'index'])
+Style = expression_type('Style', 'mstyle', '3.3.4')
+Fenced = expression_type('Fenced', 'mfenced', '3.3.8')
 
+#
 # Script and limit schemata
-Sub = derive_expression('Sub', 'msub', '3.4.1', ['base', 'subscript'])
-Sup = derive_expression('Sup', 'msup', '3.4.2', ['base', 'superscript'])
-SubSup = derive_expression('SubSup', 'msubsup', '3.4.3',
-                           ['base', 'subscript', 'superscript'])
-Under = derive_expression('Under', 'munder', '3.4.4', ['base', 'underscript'])
-Over = derive_expression('Over', 'mover', '3.4.5', ['base', 'overscript'])
-UnderOver = derive_expression('UnderOver', 'munderover', '3.4.6',
-                              ['base', 'underscript', 'overscript'])
+# -------------------------
+#
+Sub = expression_type('Sub', 'msub', '3.4.1', ['base', 'subscript'])
+Sup = expression_type('Sup', 'msup', '3.4.2', ['base', 'superscript'])
+SubSup = expression_type('SubSup', 'msubsup', '3.4.3',
+                         ['base', 'subscript', 'superscript'])
+Under = expression_type('Under', 'munder', '3.4.4', ['base', 'underscript'])
+Over = expression_type('Over', 'mover', '3.4.5', ['base', 'overscript'])
+UnderOver = expression_type('UnderOver', 'munderover', '3.4.6',
+                            ['base', 'underscript', 'overscript'])
 
+#
 # Tables and matrices
-Table = derive_expression('Table', 'mtable', '3.5.1')
-TableRow = derive_expression('TableRow', 'mtr', '3.5.2')
-TableEntry = derive_expression('TableEntry', 'mtd', '3.5.4', ['entry'])
+# -------------------
+#
+Table = expression_type('Table', 'mtable', '3.5.1')
+TableRow = expression_type('TableRow', 'mtr', '3.5.2')
+TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', ['entry'])
 
 
 class BinaryOperation(Expression):
