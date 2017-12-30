@@ -213,12 +213,6 @@ def create_token(name, tag, section):
     return type(name, (Token,), {'tag': tag, '__doc__': docstring})
 
 
-Identifier = create_token('Identifier', 'mi', '3.2.3')
-Number = create_token('Number', 'mn', '3.2.4')
-Operator = create_token('Operator', 'mo', '3.2.5')
-Text = create_token('Text', 'mtext', '3.2.6')
-
-
 def derive_expression(name, tag, section, params=None):
     doc = _DESCRIPTION_DOCSTRING.format(tag, section)
     usage = _USAGE_DOCSTRING.format(name, ', '.join(params) if params
@@ -227,6 +221,13 @@ def derive_expression(name, tag, section, params=None):
     return type(name, (Expression,), dict)
 
 
+# Token elements
+Identifier = create_token('Identifier', 'mi', '3.2.3')
+Number = create_token('Number', 'mn', '3.2.4')
+Operator = create_token('Operator', 'mo', '3.2.5')
+Text = create_token('Text', 'mtext', '3.2.6')
+
+# General layout schemata
 Row = derive_expression('Row', 'mrow', '3.3.1')
 Frac = derive_expression('Frac', 'mfrac', '3.3.2',
                          ['numerator', 'denominator'])
@@ -234,6 +235,8 @@ Sqrt = derive_expression('Sqrt', 'msqrt', '3.3.3', ['base'])
 Root = derive_expression('Root', 'mroot', '3.3.3', ['base', 'index'])
 Style = derive_expression('Style', 'mstyle', '3.3.4')
 Fenced = derive_expression('Fenced', 'mfenced', '3.3.8')
+
+# Script and limit schemata
 Sub = derive_expression('Sub', 'msub', '3.4.1', ['base', 'subscript'])
 Sup = derive_expression('Sup', 'msup', '3.4.2', ['base', 'superscript'])
 SubSup = derive_expression('SubSup', 'msubsup', '3.4.3',
@@ -243,6 +246,7 @@ Over = derive_expression('Over', 'mover', '3.4.5', ['base', 'overscript'])
 UnderOver = derive_expression('UnderOver', 'munderover', '3.4.6',
                               ['base', 'underscript', 'overscript'])
 
+# Tables and matrices
 Table = derive_expression('Table', 'mtable', '3.5.1')
 TableRow = derive_expression('TableRow', 'mtr', '3.5.2')
 TableEntry = derive_expression('TableEntry', 'mtd', '3.5.4', ['entry'])
