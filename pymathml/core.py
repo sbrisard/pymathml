@@ -258,10 +258,6 @@ def token_type(name, tag, section):
     The returned class is named ``name``. The docstring refers to the
     specified ``section`` of the MathML specifications.
     """
-    # doc = _DESCRIPTION_DOCSTRING.format(tag, section)
-    # usage = _USAGE_DOCSTRING.format(name, 'value')
-    # usage += ('\n\n)
-    # return type(name, (Token,), {'tag': tag, '__doc__': doc+'\n\n'+usage})
     return pymathml_type(name, Token, tag, section, params=['value'],
                          suppl_doc=_TOKEN_SUPPLEMENTARY_DOCSTRING)
 
