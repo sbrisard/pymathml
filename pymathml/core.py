@@ -195,6 +195,16 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
+class UnaryOperation(Expression):
+    """PyMathML representation of unary operations.
+
+    This class should *not* be instanciated directly. Use derived
+    classes instead.
+    """
+    def to_mml(self):
+        return Row(self.op, self.children[0], **self.attributes).to_mml()
+
+
 class BinaryOperation(Expression):
     """PyMathML representation of a binary operation.
 
@@ -265,6 +275,30 @@ def expression_type(name, tag, section, params=None):
     (``*expressions`` if not specified).
     """
     return pymathml_type(name, Expression, tag, section, params=params)
+
+
+UNARY_OPERATION_DOCSTRING = (
+    """PyMathML representation of the ``{1}`` unary operation.
+
+    Usage: ``{0}(operand, **attributes)``
+
+    which produces the following MathML code (associativity is assumed)
+
+        <mrow><mo>{1}</mo>op</mrow>
+
+    where ``op`` is the MathML representation of the ``operand``.
+    """)
+
+
+def unary_operation_type(name, op):
+    """Return a class derived from ``UnaryOperation``.
+
+    The returned class is named ``name``. ``op`` is the operator,
+    specified as a string.
+    """
+    return type(name, (UnaryOperation,),
+                {'op': Operator(op),
+                 '__doc__': UNARY_OPERATION_DOCSTRING.format(name, op)})
 
 
 BINARY_OPERATION_DOCSTRING = (
@@ -340,12 +374,6 @@ TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', ['entry'])
 
 
 
-class UnaryOperation(Expression):
-    def __init__(self, child, **attributes):
-        super().__init__(child, **attributes)
-
-    def to_mml(self):
-        return Row(self.op, self.children[0], **self.attributes).to_mml()
 
 
 class NaryOperation(Expression):
@@ -366,13 +394,8 @@ class NaryOperation(Expression):
         return Row(op, expr, **self.attributes).to_mml()
 
 
-class Neg(UnaryOperation):
-    op = Operator('-')
-
-
-class Pos(UnaryOperation):
-    op = Operator('+')
-
+Pos = unary_operation_type('Pos', '+')
+Neg = unary_operation_type('Neg', '-')
 
 Equals = binary_operation_type('Equals', '=')
 Plus = binary_operation_type('Plus', '+')
