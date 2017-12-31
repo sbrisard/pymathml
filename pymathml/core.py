@@ -226,7 +226,7 @@ class BinaryOperation(Expression):
 # Automatic creation of derived classes
 # =====================================
 #
-_SUMMARY_DOCSTRING = 'PyMathML implementation of the ``{}`` element.'
+_SUMMARY_DOCSTRING = 'PyMathML representation of the ``{}`` element.'
 _REF_DOCSTRING = 'See MathML specifications, section {}.'
 _USAGE_DOCSTRING = 'Usage: ``{}({}, **attributes)``'
 _TOKEN_SUPPLEMENTARY_DOCSTRING = ('The text of the resulting MathML token '
