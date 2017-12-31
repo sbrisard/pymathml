@@ -195,6 +195,23 @@ class Expression(BaseExpression):
                              **self.attributes)
 
 
+class BinaryOperation(Expression):
+    """PyMathML representation of a binary operation.
+
+    Assuming associativity, the binary operator can be applied to more
+    than two operands. They are enclosed in a ``mrow`` element.
+
+    This class should *not* be instanciated directly. Use derived
+    classes instead.
+    """
+    def to_mml(self):
+        children = [self.children[0]]
+        for child in self.children[1:]:
+            children.append(self.op)
+            children.append(child)
+        return Row(*children).to_mml()
+
+
 #
 # Automatic creation of derived classes
 # =====================================
@@ -250,6 +267,31 @@ def expression_type(name, tag, section, params=None):
     return pymathml_type(name, Expression, tag, section, params=params)
 
 
+BINARY_OPERATION_DOCSTRING = (
+    """PyMathML representation of the ``{1}`` binary operation.
+
+    Usage: ``{0}(*operands, **attributes)``
+
+    which produces the following MathML code (associativity is assumed)
+
+        <mrow>op1<mo>{1}</mo>op2<mo>{1}</mo>op3...</mrow>
+
+    where ``op1``, ``op2``, ``op3`` ... are the MathML representations of
+    the ``*operands``.
+    """)
+
+
+def binary_operation_type(name, op):
+    """Return a class derived from ``BinaryOperation``.
+
+    The returned class is named ``name``. ``op`` is the operator,
+    specified as a string.
+    """
+    return type(name, (BinaryOperation,),
+                {'op': Operator(op),
+                 '__doc__': BINARY_OPERATION_DOCSTRING.format(name, op)})
+
+
 #
 # Creation of classes derived from Token
 # ======================================
@@ -296,13 +338,6 @@ TableRow = expression_type('TableRow', 'mtr', '3.5.2')
 TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', ['entry'])
 
 
-class BinaryOperation(Expression):
-    def to_mml(self):
-        children = [self.children[0]]
-        for child in self.children[1:]:
-            children.append(self.op)
-            children.append(child)
-        return Row(*children).to_mml()
 
 
 class UnaryOperation(Expression):
@@ -339,20 +374,10 @@ class Pos(UnaryOperation):
     op = Operator('+')
 
 
-class Equals(BinaryOperation):
-    op = Operator('=')
-
-
-class Plus(BinaryOperation):
-    op = Operator('+')
-
-
-class Minus(BinaryOperation):
-    op = Operator('-')
-
-
-class Times(BinaryOperation):
-    op = Operator('&InvisibleTimes;')
+Equals = binary_operation_type('Equals', '=')
+Plus = binary_operation_type('Plus', '+')
+Minus = binary_operation_type('Minus', '-')
+Times = binary_operation_type('Times', '&InvisibleTimes;')
 
 
 class Sum(NaryOperation):
