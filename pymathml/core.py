@@ -222,6 +222,25 @@ class BinaryOperation(Expression):
         return Row(*children).to_mml()
 
 
+class NaryOperation(Expression):
+    """PyMathML representation of a n-ary operation.
+
+    This class should *not* be instanciated directly. Use derived
+    classes instead.
+    """
+    def to_mml(self):
+        expr, start, end = self.children
+        op = self.op
+        if end is None:
+            if start:
+                op = Under(self.op, start)
+        else:
+            if start is None:
+                op = Over(self.op, end)
+            else:
+                op = UnderOver(self.op, start, end)
+        return Row(op, expr, **self.attributes).to_mml()
+
 #
 # Automatic creation of derived classes
 # =====================================
@@ -322,6 +341,57 @@ def binary_operation_type(name, op):
                  '__doc__': BINARY_OPERATION_DOCSTRING.format(name, op)})
 
 
+NARY_OPERATION_DOCSTRING = (
+    """PyMathML representation of the ``{1}`` n-ary operation.
+
+    Usage: ``{0}(operand, start, end, **attributes)``
+
+    If both ``start`` and ``end`` are specified, the following MathML
+    code is produced
+
+        <mrow>
+            <munderover>
+                <mo>{1}</mo>
+                start
+                end
+            </munderover>
+            operand
+        </mrow>
+
+    If only ``start`` is specified, the following MathML code is produced
+
+        <mrow>
+            <munder>
+                <mo>{1}</mo>
+                start
+            </munder>
+            operand
+        </mrow>
+
+    Finally, if only ``end`` is specified, the following MathML code is
+    produced
+
+        <mrow>
+            <mover>
+                <mo>{1}</mo>
+                end
+            </mover>
+            operand
+        </mrow>
+    """)
+
+
+def nary_operation_type(name, op):
+    """Return a class derived from ``NaryOperation``.
+
+    The returned class is named ``name``. ``op`` is the operator,
+    specified as a string.
+    """
+    return type(name, (NaryOperation,),
+                {'op': Operator(op),
+                 '__doc__': NARY_OPERATION_DOCSTRING.format(name, op)})
+
+
 #
 # Creation of classes derived from Token
 # ======================================
@@ -367,28 +437,10 @@ Table = expression_type('Table', 'mtable', '3.5.1')
 TableRow = expression_type('TableRow', 'mtr', '3.5.2')
 TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', ['entry'])
 
-
-
-
-
-
-class NaryOperation(Expression):
-    def __init__(self, expr, start, end, **attributes):
-        super().__init__(expr, start, end, **attributes)
-
-    def to_mml(self):
-        expr, start, end = self.children
-        op = self.op
-        if end is None:
-            if start:
-                op = Under(self.op, start)
-        else:
-            if start is None:
-                op = Over(self.op, end)
-            else:
-                op = UnderOver(self.op, start, end)
-        return Row(op, expr, **self.attributes).to_mml()
-
+#
+# Unary, binary and n-ary operations
+# ----------------------------------
+#
 
 Pos = unary_operation_type('Pos', '+')
 Neg = unary_operation_type('Neg', '-')
@@ -398,9 +450,7 @@ Plus = binary_operation_type('Plus', '+')
 Minus = binary_operation_type('Minus', '-')
 Times = binary_operation_type('Times', '&InvisibleTimes;')
 
-
-class Sum(NaryOperation):
-    op = Operator('&Sum;')
+Sum = nary_operation_type('Sum', '&Sum;')
 
 
 def expression(expr):
