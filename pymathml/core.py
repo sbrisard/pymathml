@@ -267,8 +267,26 @@ def token_type(name, tag, section):
     The returned class is named ``name``. The docstring refers to the
     specified ``section`` of the MathML specifications.
     """
-    return pymathml_type(name, Token, tag, section, params=['value'],
-                         suppl_doc=_TOKEN_SUPPLEMENTARY_DOCSTRING)
+    return type(name, (Token,),
+                {'tag': tag,
+                 '__doc__': TOKEN_DOCSTRING.format(name, tag, section)})
+
+
+EXPRESSION_DOCSTRING = (
+    """PyMathML representation of the ``{1}`` element.
+
+    See MathML specifications, section {2}.
+
+    Usage: ``{0}({3}, **attributes)``
+
+    which produces the following MathML code
+
+        <{1}>
+            to_mml(expressions[0])
+            to_mml(expressions[1])
+            ...
+        </{1}>
+    """)
 
 
 def expression_type(name, tag, section, params=None):
@@ -279,7 +297,12 @@ def expression_type(name, tag, section, params=None):
     section of the docstring lists the ``params`` of the initializer
     (``*expressions`` if not specified).
     """
-    return pymathml_type(name, Expression, tag, section, params=params)
+    if params is None:
+        params = '*expressions'
+    return type(name, (Expression,),
+                {'tag': tag,
+                 '__doc__': EXPRESSION_DOCSTRING.format(name, tag, section,
+                                                        params)})
 
 
 UNARY_OPERATION_DOCSTRING = (
@@ -404,10 +427,9 @@ Text = token_type('Text', 'mtext', '3.2.6')
 # -----------------------
 #
 Row = expression_type('Row', 'mrow', '3.3.1')
-Frac = expression_type('Frac', 'mfrac', '3.3.2',
-                       ['numerator', 'denominator'])
-Sqrt = expression_type('Sqrt', 'msqrt', '3.3.3', ['base'])
-Root = expression_type('Root', 'mroot', '3.3.3', ['base', 'index'])
+Frac = expression_type('Frac', 'mfrac', '3.3.2', 'numerator, denominator')
+Sqrt = expression_type('Sqrt', 'msqrt', '3.3.3', 'base')
+Root = expression_type('Root', 'mroot', '3.3.3', 'base, index')
 Style = expression_type('Style', 'mstyle', '3.3.4')
 Fenced = expression_type('Fenced', 'mfenced', '3.3.8')
 
@@ -415,14 +437,14 @@ Fenced = expression_type('Fenced', 'mfenced', '3.3.8')
 # Script and limit schemata
 # -------------------------
 #
-Sub = expression_type('Sub', 'msub', '3.4.1', ['base', 'subscript'])
-Sup = expression_type('Sup', 'msup', '3.4.2', ['base', 'superscript'])
+Sub = expression_type('Sub', 'msub', '3.4.1', 'base, subscript')
+Sup = expression_type('Sup', 'msup', '3.4.2', 'base, superscript')
 SubSup = expression_type('SubSup', 'msubsup', '3.4.3',
-                         ['base', 'subscript', 'superscript'])
-Under = expression_type('Under', 'munder', '3.4.4', ['base', 'underscript'])
-Over = expression_type('Over', 'mover', '3.4.5', ['base', 'overscript'])
+                         'base, subscript, superscript')
+Under = expression_type('Under', 'munder', '3.4.4', 'base, underscript')
+Over = expression_type('Over', 'mover', '3.4.5', 'base, overscript')
 UnderOver = expression_type('UnderOver', 'munderover', '3.4.6',
-                            ['base', 'underscript', 'overscript'])
+                            'base, underscript, overscript')
 
 #
 # Tables and matrices
@@ -430,7 +452,7 @@ UnderOver = expression_type('UnderOver', 'munderover', '3.4.6',
 #
 Table = expression_type('Table', 'mtable', '3.5.1')
 TableRow = expression_type('TableRow', 'mtr', '3.5.2')
-TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', ['entry'])
+TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', 'entry')
 
 #
 # Unary, binary and n-ary operations
