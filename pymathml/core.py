@@ -202,7 +202,7 @@ class UnaryOperation(Expression):
     classes instead.
     """
     def to_mml(self):
-        return Row(self.op, self.children[0], **self.attributes).to_mml()
+        return Row(self.operator, self.children[0], **self.attributes).to_mml()
 
 
 class BinaryOperation(Expression):
@@ -217,7 +217,7 @@ class BinaryOperation(Expression):
     def to_mml(self):
         children = [self.children[0]]
         for child in self.children[1:]:
-            children.append(self.op)
+            children.append(self.operator)
             children.append(child)
         return Row(*children).to_mml()
 
@@ -230,45 +230,35 @@ class NaryOperation(Expression):
     """
     def to_mml(self):
         expr, start, end = self.children
-        op = self.op
+        operator = self.operator
         if end is None:
             if start:
-                op = Under(self.op, start)
+                operator = Under(self.operator, start)
         else:
             if start is None:
-                op = Over(self.op, end)
+                operator = Over(self.operator, end)
             else:
-                op = UnderOver(self.op, start, end)
-        return Row(op, expr, **self.attributes).to_mml()
+                operator = UnderOver(self.operator, start, end)
+        return Row(operator, expr, **self.attributes).to_mml()
+
 
 #
 # Automatic creation of derived classes
 # =====================================
 #
-_SUMMARY_DOCSTRING = 'PyMathML representation of the ``{}`` element.'
-_REF_DOCSTRING = 'See MathML specifications, section {}.'
-_USAGE_DOCSTRING = 'Usage: ``{}({}, **attributes)``'
-_TOKEN_SUPPLEMENTARY_DOCSTRING = ('The text of the resulting MathML token '
-                                  'element is ``str(value)``.')
+TOKEN_DOCSTRING = (
+    """PyMathML representation of the ``{1}`` token element.
 
+    See MathML specifications, section {2}.
 
-def pymathml_type(name, base, tag, section, params=None, suppl_doc=''):
-    """Return a class derived from ``base``.
+    Usage: ``{0}(value, **attributes)``
 
-    The returned class is named ``name``. The docstring refers to the
-    specified ``section`` of the MathML specifications. The "usage"
-    section of the docstring lists the ``params`` of the initializer
-    (``*expressions`` if not specified).
+    which produces the following MathML code
 
-    A supplementary docstring can also be specified.
-    """
-    summary = _SUMMARY_DOCSTRING.format(tag)
-    ref = _REF_DOCSTRING.format(section) if section else ''
-    usage = _USAGE_DOCSTRING.format(name, ', '.join(params) if params
-                                    else '*expressions')
-    return type(name, (base,), {'tag': tag,
-                                '__doc__': '\n\n'.join([summary, ref, usage,
-                                                        suppl_doc])})
+        <{1}>str(value)</{1}>
+
+    (note the call to ``str``).
+    """)
 
 
 def token_type(name, tag, section):
@@ -306,15 +296,15 @@ UNARY_OPERATION_DOCSTRING = (
     """)
 
 
-def unary_operation_type(name, op):
+def unary_operation_type(name, operator):
     """Return a class derived from ``UnaryOperation``.
 
-    The returned class is named ``name``. ``op`` is the operator,
-    specified as a string.
+    The returned class is named ``name``. The ``operator`` is specified
+    as a string.
     """
     return type(name, (UnaryOperation,),
-                {'op': Operator(op),
-                 '__doc__': UNARY_OPERATION_DOCSTRING.format(name, op)})
+                {'operator': Operator(operator),
+                 '__doc__': UNARY_OPERATION_DOCSTRING.format(name, operator)})
 
 
 BINARY_OPERATION_DOCSTRING = (
@@ -335,15 +325,15 @@ BINARY_OPERATION_DOCSTRING = (
     """)
 
 
-def binary_operation_type(name, op):
+def binary_operation_type(name, operator):
     """Return a class derived from ``BinaryOperation``.
 
-    The returned class is named ``name``. ``op`` is the operator,
-    specified as a string.
+    The returned class is named ``name``. The ``operator`` is specified
+    as a string.
     """
     return type(name, (BinaryOperation,),
-                {'op': Operator(op),
-                 '__doc__': BINARY_OPERATION_DOCSTRING.format(name, op)})
+                {'operator': Operator(operator),
+                 '__doc__': BINARY_OPERATION_DOCSTRING.format(name, operator)})
 
 
 NARY_OPERATION_DOCSTRING = (
@@ -386,15 +376,15 @@ NARY_OPERATION_DOCSTRING = (
     """)
 
 
-def nary_operation_type(name, op):
+def nary_operation_type(name, operator):
     """Return a class derived from ``NaryOperation``.
 
-    The returned class is named ``name``. ``op`` is the operator,
-    specified as a string.
+    The returned class is named ``name``. The ``operator`` is specified
+    as a string.
     """
     return type(name, (NaryOperation,),
-                {'op': Operator(op),
-                 '__doc__': NARY_OPERATION_DOCSTRING.format(name, op)})
+                {'operator': Operator(operator),
+                 '__doc__': NARY_OPERATION_DOCSTRING.format(name, operator)})
 
 
 #
