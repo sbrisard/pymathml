@@ -299,9 +299,10 @@ UNARY_OPERATION_DOCSTRING = (
 
     which produces the following MathML code (associativity is assumed)
 
-        <mrow><mo>{1}</mo>op</mrow>
-
-    where ``op`` is the MathML representation of the ``operand``.
+        <mrow>
+            <mo>{1}</mo>
+            operand
+        </mrow>
     """)
 
 
@@ -323,10 +324,14 @@ BINARY_OPERATION_DOCSTRING = (
 
     which produces the following MathML code (associativity is assumed)
 
-        <mrow>op1<mo>{1}</mo>op2<mo>{1}</mo>op3...</mrow>
-
-    where ``op1``, ``op2``, ``op3`` ... are the MathML representations of
-    the ``*operands``.
+        <mrow>
+            operands[0]
+            <mo>{1}</mo>
+            operands[1]
+            <mo>{1}</mo>
+            operands[2]
+            ...
+        </mrow>
     """)
 
 
