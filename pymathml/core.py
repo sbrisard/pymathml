@@ -76,7 +76,7 @@ class BaseExpression:
         return Sub(self, subscript)
 
     def __call__(self, *args):
-        return Row(self, Operator('&ApplyFunction;'), Fenced(*args))
+        return Row(self, Operator('\N{FUNCTION APPLICATION}'), Fenced(*args))
 
     def to_mml(self):
         """Return the MathML representation of this object as a string."""
@@ -448,9 +448,9 @@ Neg = unary_operation_type('Neg', '-')
 Equals = binary_operation_type('Equals', '=')
 Plus = binary_operation_type('Plus', '+')
 Minus = binary_operation_type('Minus', '-')
-Times = binary_operation_type('Times', '&InvisibleTimes;')
+Times = binary_operation_type('Times', '\N{INVISIBLE TIMES}')
 
-Sum = nary_operation_type('Sum', '&Sum;')
+Sum = nary_operation_type('Sum', '\N{N-ARY SUMMATION}')
 
 
 def expression(expr):

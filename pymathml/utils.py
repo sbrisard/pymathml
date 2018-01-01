@@ -10,5 +10,5 @@ def table(rows, **attributes):
 
 
 def underbrace(expr, underscript):
-    return Under(expr, Under(Operator('&UnderBrace;'), underscript,
+    return Under(expr, Under(Operator('\N{BOTTOM CURLY BRACKET}'), underscript,
                              accentunder='true'))
