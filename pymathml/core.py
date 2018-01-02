@@ -282,9 +282,7 @@ EXPRESSION_DOCSTRING = (
     which produces the following MathML code
 
         <{1}>
-            to_mml(expressions[0])
-            to_mml(expressions[1])
-            ...
+            {4}
         </{1}>
     """)
 
@@ -297,12 +295,24 @@ def expression_type(name, tag, section, params=None):
     section of the docstring lists the ``params`` of the initializer
     (``*expressions`` if not specified).
     """
+    placeholder = '{4}'
+    doc = EXPRESSION_DOCSTRING
     if params is None:
-        params = '*expressions'
-    return type(name, (Expression,),
-                {'tag': tag,
-                 '__doc__': EXPRESSION_DOCSTRING.format(name, tag, section,
-                                                        params)})
+        params_list = ['to_mml(expressions[0])',
+                       'to_mml(expressions[1])',
+                       '...']
+    else:
+        params_list = ['to_mml({})'.format(s.strip())
+                       for s in params.split(',')]
+    n = len(params_list)
+    lines = doc.splitlines()
+    for i, s in enumerate(lines):
+        if placeholder in s:
+            break
+    lines = (lines[:i]+[lines[i].replace('4', str(j+4)) for j in range(n)]
+             + lines[i+1:])
+    doc = '\n'.join(lines).format(name, tag, section, params, *params_list)
+    return type(name, (Expression,), {'tag': tag, '__doc__': doc})
 
 
 UNARY_OPERATION_DOCSTRING = (
@@ -505,6 +515,7 @@ def to_mml(expr, display=None):
         return to_xml_string('math', children=[e],
                              xmlns='http://www.w3.org/1998/Math/MathML',
                              display=str(display))
+
 
 # Local Variables:
 # fill-column: 72
