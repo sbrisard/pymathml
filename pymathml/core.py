@@ -199,7 +199,8 @@ class Expression(BaseExpression):
     def to_mml(self):
         element = ET.Element(self.tag, **self.attributes)
         for child in self.children:
-            element.append(child.to_mml())
+            if child:
+                element.append(child.to_mml())
         return element
 
 
@@ -516,7 +517,7 @@ def to_mml(expr, display=None):
     a ``math`` tag, with the specified 'display' attribute (namely:
     'inline' or 'block').
     """
-    element = expression(expr).to_mml() if expr else None
+    element = expression(expr).to_mml()
     if display is None:
         return element
     else:
