@@ -50,5 +50,9 @@ def table(cells, **attributes):
 
 
 def underbrace(expr, underscript):
+    """Create an underbraced expression.
+
+    The LaTeX equivalent is ``\\underbrace{expr}_{underscript}``.
+    """
     return Under(expr, Under(Operator('\N{BOTTOM CURLY BRACKET}'), underscript,
                              accentunder='true'))
