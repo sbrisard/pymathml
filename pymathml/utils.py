@@ -1,7 +1,40 @@
 """A collection of functions to facilitate creation of expressions.
 
 """
-from pymathml.core import Operator, Table, TableRow, TableEntry, Under
+import xml.etree.ElementTree as ET
+
+from pymathml.core import (expression, Identifier, Operator, Table, TableRow,
+                           TableEntry, Under, )
+
+
+def to_mml(expr, display=None):
+    """Convert ``expr`` to MathML.
+
+    The MathML representation of ``expr`` is returned as a
+    ``xml.etree.ElementTree.Element``.
+
+    If ``display`` is not ``None``, then the expression is embedded
+    into a ``math`` tag, with the specified ``'display'`` attribute
+    (namely: ``'inline'`` or ``'block'``).
+    """
+    element = expression(expr).to_mml()
+    if display is None:
+        return element
+    else:
+        math = ET.Element('math',
+                          xmlns='http://www.w3.org/1998/Math/MathML',
+                          display=str(display))
+        math.append(element)
+        return math
+
+
+def identifiers(*names, **attributes):
+    """Return instances of ``Identifier`` with specified names.
+
+    The ``**attributes`` are passed to the initializer of all returned
+    instances of ``Identifier``.
+    """
+    return tuple(Identifier(name, **attributes) for name in names)
 
 
 def table(rows, **attributes):
