@@ -498,11 +498,14 @@ def identifiers(*names, **attributes):
 
 
 def to_mml(expr, display=None):
-    """Return the MathML code for the specified expression, as a string.
+    """Convert ``expr`` to MathML.
 
-    If `display` is not ``None``, then the expression is embedded into
-    a ``math`` tag, with the specified 'display' attribute (namely:
-    'inline' or 'block').
+    The MathML representation of ``expr`` is returned as a
+    ``xml.etree.ElementTree.Element``.
+
+    If ``display`` is not ``None``, then the expression is embedded
+    into a ``math`` tag, with the specified ``'display'`` attribute
+    (namely: ``'inline'`` or ``'block'``).
     """
     element = expression(expr).to_mml()
     if display is None:
