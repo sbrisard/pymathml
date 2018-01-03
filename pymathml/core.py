@@ -477,6 +477,16 @@ Sum = nary_operation_type('Sum', '\N{N-ARY SUMMATION}')
 
 
 def expression(expr):
+    """Convert ``expr`` to a PyMathML expression.
+
+    The following conversion rules apply
+
+      - PyMathML expressions are returned unchanged,
+      - numbers are converted to ``Number``,
+      - strings are converted to ``Identifier``.
+
+    In other cases, a ``ValueError`` is raised.
+    """
     if expr is None:
         return None
     elif isinstance(expr, BaseExpression):
