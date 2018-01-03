@@ -1,4 +1,5 @@
 import numbers
+import xml.etree.ElementTree as ET
 
 
 def to_xml_string(tag, text=None, children=None, **attributes):
@@ -79,7 +80,11 @@ class BaseExpression:
         return Row(self, Operator('\N{FUNCTION APPLICATION}'), Fenced(*args))
 
     def to_mml(self):
-        """Return the MathML representation of this object as a string."""
+        """Convert this object to MathML.
+
+        The MathML representation of this object is returned as a
+        ``xml.etree.ElementTree.Element``.
+        """
         raise NotImplementedError('sub-classes of BaseExpression should'
                                   ' implement this method')
 
@@ -109,7 +114,9 @@ class Token(BaseExpression):
         self.attributes = attributes
 
     def to_mml(self):
-        return to_xml_string(self.tag, text=str(self.value), **self.attributes)
+        element = ET.Element(self.tag, **self.attributes)
+        element.text = str(self.value)
+        return element
 
 
 class Expression(BaseExpression):
@@ -190,9 +197,10 @@ class Expression(BaseExpression):
         self.attributes = attributes
 
     def to_mml(self):
-        return to_xml_string(self.tag,
-                             children=[to_mml(c) for c in self.children],
-                             **self.attributes)
+        element = ET.Element(self.tag, **self.attributes)
+        for child in self.children:
+            element.append(child.to_mml())
+        return element
 
 
 class UnaryOperation(Expression):
@@ -508,13 +516,15 @@ def to_mml(expr, display=None):
     a ``math`` tag, with the specified 'display' attribute (namely:
     'inline' or 'block').
     """
-    e = '' if expr is None else expression(expr).to_mml()
+    element = expression(expr).to_mml() if expr else None
     if display is None:
-        return e
+        return element
     else:
-        return to_xml_string('math', children=[e],
-                             xmlns='http://www.w3.org/1998/Math/MathML',
-                             display=str(display))
+        math = ET.Element('math',
+                          xmlns='http://www.w3.org/1998/Math/MathML',
+                          display=str(display))
+        math.append(element)
+        return math
 
 
 # Local Variables:
