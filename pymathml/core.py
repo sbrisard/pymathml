@@ -2,19 +2,6 @@ import numbers
 import xml.etree.ElementTree as ET
 
 
-def to_xml_string(tag, text=None, children=None, **attributes):
-    if text is None:
-        text = ''
-    attributes_str = ('' if attributes == {}
-                      else (' '+' '.join('{}="{}"'.format(k, str(v))
-                                         for k, v in attributes.items())))
-    children_str = ('' if children is None
-                    else ''.join(str(c) for c in children))
-    s = u'<{0}{1}>{2}{3}</{0}>'.format(tag, attributes_str, children_str,
-                                       str(text))
-    return s
-
-
 class BaseExpression:
     """Base class for MathML expressions.
 
