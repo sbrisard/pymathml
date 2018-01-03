@@ -500,9 +500,10 @@ def expression(expr):
 
 
 def identifiers(*names, **attributes):
-    """Return instances of Identifier with specified names.
+    """Return instances of ``Identifier`` with specified names.
 
-    All returned instances of class Identifier have same attributes.
+    The ``**attributes`` are passed to the initializer of all returned
+    instances of ``Identifier``.
     """
     return tuple(Identifier(name, **attributes) for name in names)
 
