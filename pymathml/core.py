@@ -80,19 +80,7 @@ class Token(BaseExpression):
     """Token elements (see MathML specifications, section 3.1.9.1).
 
     This class should *not* be instanciated directly. Use derived
-    classes instead (listed below, together with their MathML
-    translation).
-
-    ================= ====================
-    PyMathML          MathML
-    ================= ====================
-    Identifier        <mi>...</mi>
-    Number            <mn>...</mn>
-    Operator          <mo>...</mo>
-    Text              <mtext>...</mtext>
-    *not implemented* <mspace>...</mspace>
-    *not implemented* <ms>...</ms>
-    ================= ====================
+    classes instead (see list in documentation).
     """
 
     def __init__(self, value, **attributes):
@@ -116,61 +104,7 @@ class Expression(BaseExpression):
       - tables and matrices.
 
     This class should *not* be instanciated directly. Use derived
-    classes instead (listed below, together with their MathML
-    translation).
-
-    General Layout Schemata
-    -----------------------
-
-    See MathML specifications, section 3.1.9.2.
-
-    ======== =================
-    MathML   PyMathML
-    ======== =================
-    mrow     Row
-    mfrac    Frac
-    msqrt    Sqrt
-    mroot    Root
-    mstyle   Style
-    merror   *not implemented*
-    mpadded  *not implemented*
-    mphantom *not implemented*
-    mfenced  Fenced
-    menclose *not implemented*
-    ======== =================
-
-    Script and Limit Schemata
-    -------------------------
-
-    See MathML specifications, section 3.1.9.3.
-
-    ============= =================
-    MathML        PyMathML
-    ============= =================
-    msub          Sub
-    msup          Sup
-    msubsup       SubSup
-    munder        Under
-    mover         Over
-    munderover    UnderOver
-    mmultiscripts *not implemented*
-    ============= =================
-
-    Tables and matrices
-    -------------------
-
-    See MathML specifications, section 3.1.9.4.
-
-    =========== =================
-    MathML      PyMathML
-    =========== =================
-    mtable      Table
-    mlabeledtr  *not implemented*
-    mtr         TableRow
-    mtd         TableEntry
-    maligngroup *not implemented*
-    malignmark  *not implemented*
-    =========== =================
+    classes instead (see list in documentation).
     """
     def __init__(self, *expressions, **attributes):
         """Initialize expression.
