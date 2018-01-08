@@ -6,9 +6,9 @@ with open('pymathml/__init__.py', 'r') as f:
     lines = f.read()
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         lines, re.MULTILINE).group(1)
-    description = re.search(r'^u\"\"\"(.*)',
+    description = re.search(r'\"\"\"(.*)',
                             lines, re.MULTILINE).group(1)
-    long_description = re.search('^u\"\"\"(.*)^\"\"\"',
+    long_description = re.search('\"\"\"(.*)^\"\"\"',
                                  lines, re.MULTILINE | re.DOTALL).group(1)
     author = re.search(r'^__author__\s*=\s*[\'"]([^\'"]*)[\'"]',
                        lines, re.MULTILINE).group(1)
