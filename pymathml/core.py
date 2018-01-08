@@ -433,6 +433,27 @@ def expression(expr):
         raise ValueError(expr)
 
 
+def tomathml(expr, display=None):
+    """Convert ``expr`` to MathML.
+
+    The MathML representation of ``expr`` is returned as a
+    ``xml.etree.ElementTree.Element``.
+
+    If ``display`` is not ``None``, then the expression is embedded
+    into a ``math`` tag, with the specified ``'display'`` attribute
+    (namely: ``'inline'`` or ``'block'``).
+    """
+    element = expression(expr).tomathml()
+    if display is None:
+        return element
+    else:
+        math = ET.Element('math',
+                          xmlns='http://www.w3.org/1998/Math/MathML',
+                          display=str(display))
+        math.append(element)
+        return math
+
+
 # Local Variables:
 # fill-column: 72
 # End:
