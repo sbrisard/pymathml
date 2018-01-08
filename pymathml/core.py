@@ -150,7 +150,8 @@ class UnaryOperation(Expression):
     classes instead.
     """
     def tomathml(self):
-        return Row(self.operator, self.children[0], **self.attributes).tomathml()
+        return Row(self.operator, self.children[0],
+                   **self.attributes).tomathml()
 
 
 class BinaryOperation(Expression):
