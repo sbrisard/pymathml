@@ -66,7 +66,7 @@ class BaseExpression:
     def __call__(self, *args):
         return Row(self, Operator('\N{FUNCTION APPLICATION}'), Fenced(*args))
 
-    def to_mml(self):
+    def tomathml(self):
         """Convert this object to MathML.
 
         The MathML representation of this object is returned as a
@@ -88,7 +88,7 @@ class Token(BaseExpression):
         self.value = value
         self.attributes = attributes
 
-    def to_mml(self):
+    def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
         element.text = str(self.value)
         return element
@@ -117,11 +117,11 @@ class Expression(BaseExpression):
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
 
-    def to_mml(self):
+    def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
         for child in self.children:
             if child:
-                element.append(child.to_mml())
+                element.append(child.tomathml())
         return element
 
 
@@ -131,8 +131,8 @@ class UnaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
-    def to_mml(self):
-        return Row(self.operator, self.children[0], **self.attributes).to_mml()
+    def tomathml(self):
+        return Row(self.operator, self.children[0], **self.attributes).tomathml()
 
 
 class BinaryOperation(Expression):
@@ -144,12 +144,12 @@ class BinaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
-    def to_mml(self):
+    def tomathml(self):
         children = [self.children[0]]
         for child in self.children[1:]:
             children.append(self.operator)
             children.append(child)
-        return Row(*children).to_mml()
+        return Row(*children).tomathml()
 
 
 class NaryOperation(Expression):
@@ -158,7 +158,7 @@ class NaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
-    def to_mml(self):
+    def tomathml(self):
         expr, start, end = self.children
         operator = self.operator
         if end is None:
@@ -169,7 +169,7 @@ class NaryOperation(Expression):
                 operator = Over(self.operator, end)
             else:
                 operator = UnderOver(self.operator, start, end)
-        return Row(operator, expr, **self.attributes).to_mml()
+        return Row(operator, expr, **self.attributes).tomathml()
 
 
 #
@@ -228,11 +228,11 @@ def expression_type(name, tag, section, params=None):
     placeholder = '{4}'
     doc = EXPRESSION_DOCSTRING
     if params is None:
-        params_list = ['to_mml(expressions[0])',
-                       'to_mml(expressions[1])',
+        params_list = ['tomathml(expressions[0])',
+                       'tomathml(expressions[1])',
                        '...']
     else:
-        params_list = ['to_mml({})'.format(s.strip())
+        params_list = ['tomathml({})'.format(s.strip())
                        for s in params.split(',')]
     n = len(params_list)
     lines = doc.splitlines()

@@ -27,7 +27,7 @@ defines the mathematical expression ``a²+2ab+b²``. PyMathML then produces the 
 
 
 ```python
-ET.dump(expr.to_mml())
+ET.dump(expr.tomathml())
 ```
 
     <mrow><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mrow><mrow><mn>2</mn><mo>⁢</mo><mi>a</mi></mrow><mo>⁢</mo><mi>b</mi></mrow></mrow><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow>
@@ -61,7 +61,7 @@ keyword argument  and the attributes as keyword arguments. For example
 
 ```python
 x = Identifier('x', mathvariant='bold')
-ET.dump(x.to_mml())
+ET.dump(x.tomathml())
 ```
 
     <mi mathvariant="bold">x</mi>
@@ -88,7 +88,7 @@ attributes as keyword arguments. For example
 
 ```python
 expr = Sup('a', 2, superscriptshift='0.5em')
-ET.dump(expr.to_mml())
+ET.dump(expr.tomathml())
 ```
 
     <msup superscriptshift="0.5em"><mi>a</mi><mn>2</mn></msup>
@@ -112,9 +112,9 @@ print(inspect.getdoc(SubSup))
     which produces the following MathML code
     
         <msubsup>
-            to_mml(base)
-            to_mml(subscript)
-            to_mml(superscript)
+            tomathml(base)
+            tomathml(subscript)
+            tomathml(superscript)
         </msubsup>
     
 
@@ -170,7 +170,7 @@ x = Identifier('x')
 
 ```python
 expr = f(x[1], x[2], x[3])**2
-ET.dump(expr.to_mml())
+ET.dump(expr.tomathml())
 ```
 
     <msup><mrow><mi>f</mi><mo>⁡</mo><mfenced><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>3</mn></msub></mfenced></mrow><mn>2</mn></msup>
@@ -183,7 +183,7 @@ import IPython.display
 
 
 ```python
-display(IPython.display.HTML(ET.tostring(pymathml.utils.to_mml(expr, display='block'), encoding='unicode')))
+display(IPython.display.HTML(ET.tostring(pymathml.utils.tomathml(expr, display='block'), encoding='unicode')))
 ```
 
 

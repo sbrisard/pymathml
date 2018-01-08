@@ -7,7 +7,7 @@ from pymathml.core import (expression, Identifier, Operator, Table, TableRow,
                            TableEntry, Under, )
 
 
-def to_mml(expr, display=None):
+def tomathml(expr, display=None):
     """Convert ``expr`` to MathML.
 
     The MathML representation of ``expr`` is returned as a
@@ -17,7 +17,7 @@ def to_mml(expr, display=None):
     into a ``math`` tag, with the specified ``'display'`` attribute
     (namely: ``'inline'`` or ``'block'``).
     """
-    element = expression(expr).to_mml()
+    element = expression(expr).tomathml()
     if display is None:
         return element
     else:

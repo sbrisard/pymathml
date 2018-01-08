@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 from pymathml import *
-from pymathml.utils import identifiers, to_mml, table, underbrace
+from pymathml.utils import identifiers, tomathml, table, underbrace
 
 
 if __name__ == '__main__':
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     head = ET.SubElement(html, 'head')
     meta = ET.SubElement(head, 'meta', charset='utf-8')
     body = ET.SubElement(html, 'body')
-    body.append(to_mml(t, display='block'))
+    body.append(tomathml(t, display='block'))
 
     tree = ET.ElementTree(html)
     with open('essai.html', 'w', encoding='utf8') as f:
