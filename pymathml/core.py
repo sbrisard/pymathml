@@ -92,6 +92,13 @@ class Token(BaseExpression):
         self.value = value
         self.attributes = attributes
 
+    def __repr__(self):
+        params = [repr(self.value)]
+        if self.attributes:
+            params += ['{}=\'{}\''.format(k, v)
+                       for k, v in self.attributes.items()]
+        return '{}({})'.format(self.__class__.__name__, ', '.join(params))
+
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
         element.text = str(self.value)
@@ -120,6 +127,13 @@ class Expression(BaseExpression):
         """
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
+
+    def __repr__(self):
+        params = [repr(child) for child in self.children]
+        if self.attributes:
+            params += ['{}=\'{}\''.format(k, v)
+                       for k, v in self.attributes.items()]
+        return '{}({})'.format(self.__class__.__name__, ', '.join(params))
 
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
