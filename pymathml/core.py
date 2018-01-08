@@ -75,6 +75,10 @@ class BaseExpression:
         raise NotImplementedError('sub-classes of BaseExpression should'
                                   ' implement this method')
 
+    def _repr_html_(self):
+        return ET.tostring(tomathml(self, display=('block')),
+                           encoding='unicode')
+
 
 class Token(BaseExpression):
     """Token elements (see MathML specifications, section 3.1.9.1).
