@@ -30,6 +30,8 @@ class BaseExpression:
     This class does not provide an initializer and should *not* be
     instantiated directly. Use derived classes instead.
     """
+    def __str__(self):
+        return ET.tostring(self.tomathml(), encoding='unicode')
 
     def __add__(self, other):
         return Plus(self, other)
@@ -99,9 +101,6 @@ class Token(BaseExpression):
                        for k, v in self.attributes.items()]
         return '{}({})'.format(self.__class__.__name__, ', '.join(params))
 
-    def __str__(self):
-        return str(self.value)
-
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
         element.text = str(self.value)
@@ -138,10 +137,6 @@ class Expression(BaseExpression):
                        for k, v in self.attributes.items()]
         return '{}({})'.format(self.__class__.__name__, ', '.join(params))
 
-    def __str__(self):
-        params = [str(child) for child in self.children]
-        return '{}({})'.format(self.__class__.__name__, ', '.join(params))
-
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
         for child in self.children:
@@ -156,9 +151,6 @@ class UnaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
-    def __str__(self):
-        return str(self.operator)+str(self.children[0])
-
     def tomathml(self):
         return Row(self.operator, self.children[0],
                    **self.attributes).tomathml()
@@ -173,12 +165,6 @@ class BinaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
-    def __str__(self):
-        out = str(self.children[0])
-        for child in self.children[1:]:
-            out += str(self.operator)+str(child)
-        return out
-
     def tomathml(self):
         children = [self.children[0]]
         for child in self.children[1:]:
