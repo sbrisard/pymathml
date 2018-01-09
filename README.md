@@ -31,7 +31,7 @@ ET.dump(expr.tomathml())
 ```
 
     <mrow><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mrow><mrow><mn>2</mn><mo>⁢</mo><mi>a</mi></mrow><mo>⁢</mo><mi>b</mi></mrow></mrow><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow>
-    
+
 
 ## Tutorial
 
@@ -65,7 +65,7 @@ ET.dump(x.tomathml())
 ```
 
     <mi mathvariant="bold">x</mi>
-    
+
 
 Note that any object can be passed as the "text" of the token element, provided
 that it can be converted to a string.
@@ -92,7 +92,7 @@ ET.dump(expr.tomathml())
 ```
 
     <msup superscriptshift="0.5em"><mi>a</mi><mn>2</mn></msup>
-    
+
 
 (note that strings and numbers are automatically converted to ``mi`` and ``mn``
 children elements, respectively). When relevant, the docstring of the derived
@@ -104,19 +104,19 @@ print(inspect.getdoc(SubSup))
 ```
 
     PyMathML representation of the ``msubsup`` element.
-    
+
     See MathML specifications, section 3.4.3.
-    
+
     Usage: ``SubSup(base, subscript, superscript, **attributes)``
-    
+
     which produces the following MathML code
-    
+
         <msubsup>
             tomathml(base)
             tomathml(subscript)
             tomathml(superscript)
         </msubsup>
-    
+
 
 #### Conversion table for general layout schemata
 
@@ -174,7 +174,7 @@ ET.dump(expr.tomathml())
 ```
 
     <msup><mrow><mi>f</mi><mo>⁡</mo><mfenced><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>3</mn></msub></mfenced></mrow><mn>2</mn></msup>
-    
+
 
 
 ```python
@@ -186,6 +186,6 @@ import IPython.display
 display(IPython.display.HTML(ET.tostring(pymathml.utils.tomathml(expr, display='block'), encoding='unicode')))
 ```
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mi>f</mi><mo>⁡</mo><mfenced><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>3</mn></msub></mfenced></mrow><mn>2</mn></msup></math>
-
