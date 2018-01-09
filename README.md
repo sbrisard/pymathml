@@ -186,6 +186,6 @@ import IPython.display
 display(IPython.display.HTML(ET.tostring(pymathml.utils.tomathml(expr, display='block'), encoding='unicode')))
 ```
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=HTMLorMML'></script>
 
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mi>f</mi><mo>⁡</mo><mfenced><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>3</mn></msub></mfenced></mrow><mn>2</mn></msup></math>
