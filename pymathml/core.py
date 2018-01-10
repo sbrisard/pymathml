@@ -24,10 +24,10 @@ class BaseExpression:
         return Minus(other, self)
 
     def __mul__(self, other):
-        return Times(self, other)
+        return InvisibleTimes(self, other)
 
     def __rmul__(self, other):
-        return Times(other, self)
+        return InvisibleTimes(other, self)
 
     def __pow__(self, other):
         return Sup(self, other)
@@ -404,7 +404,8 @@ Neg = unary_operation_type('Neg', '-')
 Equals = binary_operation_type('Equals', '=')
 Plus = binary_operation_type('Plus', '+')
 Minus = binary_operation_type('Minus', '-')
-Times = binary_operation_type('Times', '\N{INVISIBLE TIMES}')
+Times = binary_operation_type('Times', '\N{MULTIPLICATION SIGN}')
+InvisibleTimes = binary_operation_type('Times', '\N{INVISIBLE TIMES}')
 
 Sum = nary_operation_type('Sum', '\N{N-ARY SUMMATION}')
 
