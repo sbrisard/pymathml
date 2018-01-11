@@ -461,6 +461,19 @@ def tomathml(expr, display=None):
         return math
 
 
+def tostring(expr, display=None):
+    """Return the MathML representation of ``expr`` as a string.
+
+    The MathML representation of ``expr`` is returned as a string.
+    ``xml.etree.ElementTree.Element``.
+
+    If ``display`` is not ``None``, then the expression is embedded
+    into a ``math`` tag, with the specified ``'display'`` attribute
+    (namely: ``'inline'`` or ``'block'``).
+    """
+    return ET.tostring(tomathml(expr), encoding='unicode')
+
+
 # Local Variables:
 # fill-column: 72
 # End:
