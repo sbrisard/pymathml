@@ -255,7 +255,7 @@ UNARY_OPERATION_DOCSTRING = (
 
     Usage: ``{0}(operand, **attributes)``
 
-    which produces the following MathML code (associativity is assumed)
+    which produces the following MathML code
 
         <mrow>
             <mo>{1}</mo>
