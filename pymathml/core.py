@@ -471,7 +471,7 @@ def tostring(expr, display=None):
     into a ``math`` tag, with the specified ``'display'`` attribute
     (namely: ``'inline'`` or ``'block'``).
     """
-    return ET.tostring(tomathml(expr), encoding='unicode')
+    return ET.tostring(tomathml(expr, display), encoding='unicode')
 
 
 # Local Variables:
