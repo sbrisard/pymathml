@@ -49,6 +49,7 @@ The remainder of this page is a tutorial. It is organized as follows:
     - [Unary operations](#unary-operations)
     - [Binary operations](#binary-operations)
     - [N-ary operations](#n-ary-operations)
+  - [Convenience functions](#convenience-functions)
     
 This ``README.md`` is the Markdown export of a Jupyter Notebook which can be
 found in the ``docs/`` directory of this repository.
@@ -720,4 +721,48 @@ print(inspect.getdoc(Union))
             </mover>
             operand
         </mrow>
+    
+
+## Convenience functions
+
+Convenience functions can be found in the ``pymathml.utils``. See docstrings
+for more details.
+
+
+```python
+import pymathml.utils
+help(pymathml.utils)
+```
+
+    Help on module pymathml.utils in pymathml:
+    
+    NAME
+        pymathml.utils - A collection of functions to facilitate creation of expressions.
+    
+    FUNCTIONS
+        identifiers(*names, **attributes)
+            Return instances of Identifier with specified names.
+            
+            The **attributes are passed to the initializer of all returned
+            instances of Identifier.
+        
+        table(cells, **attributes)
+            Create a Table.
+            
+            The cells of the returned table are specified as an iterable of
+            iterables. The **attributes are passed to the initializer of the
+            Table object (attributes cannot be set for the nested TableRow and
+            TableEntry objects)
+        
+        underbrace(expr, underscript)
+            Create an underbraced expression.
+            
+            The LaTeX equivalent is:
+            
+                \underbrace{expr}_{underscript}
+    
+    FILE
+        c:\users\sbrisard\documents\professionnels\projets\pymathml\pymathml\utils.py
+    
+    
     
