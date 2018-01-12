@@ -41,14 +41,14 @@ To install PyMathML, clone this repository and issue the following command:
 The remainder of this page is a tutorial. It is organized as follows:
   
   - [Converting PyMathML expressions to MathML](#converting-pymathml-expressions-to-mathml)
-  - [Basic MathML elements](#Basic-MathML-elements)
-    - [Token elements](#Token-elements)
-    - [Non-token elements](#Non-token-elements)
-  - [Building complex expressions with special methods](#Building-complex-expressions-with-special-methods)
-  - [Mathematical operations](#Mathematical-operations)
-    - [Unary operations](#Unary-operations)
-    - [Binary operations](#Binary-operations)
-    - [N-ary operations](#N-ary-operations)
+  - [Basic MathML elements](#basic-mathml-elements)
+    - [Token elements](#token-elements)
+    - [Non-token elements](#non-token-elements)
+  - [Building complex expressions with special methods](#building-complex-expressions-with-special-methods)
+  - [Mathematical operations](#mathematical-operations)
+    - [Unary operations](#unary-operations)
+    - [Binary operations](#binary-operations)
+    - [N-ary operations](#n-ary-operations)
     
 This ``README.md`` is the Markdown export of a Jupyter Notebook which can be
 found in the ``docs/`` directory of this repository.
