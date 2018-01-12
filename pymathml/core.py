@@ -309,7 +309,7 @@ NARY_OPERATION_DOCSTRING = (
 
     Usage: ``{0}(operand, start, end, **attributes)``
 
-    If both ``start`` and ``end`` are specified, the following MathML
+    If both ``start`` and ``end`` are not ``None``, the following MathML
     code is produced
 
         <mrow>
@@ -321,7 +321,8 @@ NARY_OPERATION_DOCSTRING = (
             operand
         </mrow>
 
-    If only ``start`` is specified, the following MathML code is produced
+    If only ``start`` is not ``None``, the following MathML code is
+    produced
 
         <mrow>
             <munder>
@@ -331,8 +332,8 @@ NARY_OPERATION_DOCSTRING = (
             operand
         </mrow>
 
-    Finally, if only ``end`` is specified, the following MathML code is
-    produced
+    Finally, if only ``end`` is not ``None``, the following MathML code
+    is produced
 
         <mrow>
             <mover>
