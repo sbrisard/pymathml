@@ -154,7 +154,7 @@ class BinaryOperation(Expression):
         for child in self.children[1:]:
             children.append(self.operator)
             children.append(child)
-        return Row(*children).tomathml()
+        return Row(*children, **self.attributes).tomathml()
 
 
 class NaryOperation(Expression):
