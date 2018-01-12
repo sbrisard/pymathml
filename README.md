@@ -40,7 +40,7 @@ To install PyMathML, clone this repository and issue the following command:
 
 The remainder of this page is a tutorial. It is organized as follows:
   
-  - [Converting PyMathML expressions to MathML](#Converting-PyMathML-expressions-to-MathML)
+  - [Converting PyMathML expressions to MathML](#converting-pymathml-expressions-to-mathml)
   - [Basic MathML elements](#Basic-MathML-elements)
     - [Token elements](#Token-elements)
     - [Non-token elements](#Non-token-elements)
