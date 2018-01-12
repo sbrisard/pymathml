@@ -56,7 +56,7 @@ class BaseExpression:
         """Convert this object to MathML.
 
         The MathML representation of this object is returned as a
-        ``xml.etree.ElementTree.Element``.
+        xml.etree.ElementTree.Element.
         """
         raise NotImplementedError('sub-classes of BaseExpression should'
                                   ' implement this method')
@@ -94,7 +94,7 @@ class Token(BaseExpression):
 class Expression(BaseExpression):
     """Base class for non-token elements.
 
-    This class is the base class for the following element types
+    This class is the base class for the following element types:
 
       - general layout schemata,
       - script and limit schemata,
@@ -106,10 +106,9 @@ class Expression(BaseExpression):
     def __init__(self, *expressions, **attributes):
         """Initialize expression.
 
-        ``*expressions`` are the children of the resulting MathML
-        element. They are automatically converted to ``Expression``
-        using the function ``expression``.
-
+        *expressions are the children of the resulting MathML
+        element. They are automatically converted to Expression using
+        the function expression.
         """
         self.children = [expression(e) for e in expressions]
         self.attributes = attributes
@@ -144,7 +143,7 @@ class BinaryOperation(Expression):
     """PyMathML representation of a binary operation.
 
     Assuming associativity, the binary operator can be applied to more
-    than two operands. They are enclosed in a ``mrow`` element.
+    than two operands. They are enclosed in a mrow element.
 
     This class should *not* be instanciated directly. Use derived
     classes instead.
@@ -182,25 +181,25 @@ class NaryOperation(Expression):
 # =====================================
 #
 TOKEN_DOCSTRING = (
-    """PyMathML representation of the ``{1}`` token element.
+    """PyMathML representation of the {1} token element.
 
     See MathML specifications, section {2}.
 
-    Usage: ``{0}(value, **attributes)``
+    Usage: {0}(value, **attributes)
 
-    which produces the following MathML code
+    which produces the following MathML code:x
 
         <{1}>str(value)</{1}>
 
-    (note the call to ``str``).
+    (note the call to str).
     """)
 
 
 def token_type(name, tag, section):
-    """Return a class derived from ``Token``.
+    """Return a class derived from Token.
 
-    The returned class is named ``name``. The docstring refers to the
-    specified ``section`` of the MathML specifications.
+    The returned class is named name. The docstring refers to the
+    specified section of the MathML specifications.
     """
     return type(name, (Token,),
                 {'tag': tag,
@@ -208,13 +207,13 @@ def token_type(name, tag, section):
 
 
 EXPRESSION_DOCSTRING = (
-    """PyMathML representation of the ``{1}`` element.
+    """PyMathML representation of the {1} element.
 
     See MathML specifications, section {2}.
 
-    Usage: ``{0}({3}, **attributes)``
+    Usage: {0}({3}, **attributes)
 
-    which produces the following MathML code
+    which produces the following MathML code:
 
         <{1}>
             {4}
@@ -223,12 +222,12 @@ EXPRESSION_DOCSTRING = (
 
 
 def expression_type(name, tag, section, params=None):
-    """Return a class derived from ``Expression``.
+    """Return a class derived from Expression.
 
-    The returned class is named ``name``. The docstring refers to the
-    specified ``section`` of the MathML specifications. The "usage"
-    section of the docstring lists the ``params`` of the initializer
-    (``*expressions`` if not specified).
+    The returned class is named name. The docstring refers to the
+    specified section of the MathML specifications. The "usage" section
+    of the docstring lists the params of the initializer (*expressions
+    if not specified).
     """
     placeholder = '{4}'
     doc = EXPRESSION_DOCSTRING
@@ -251,11 +250,11 @@ def expression_type(name, tag, section, params=None):
 
 
 UNARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the ``{1}`` unary operation.
+    """PyMathML representation of the {1} unary operation.
 
-    Usage: ``{0}(operand, **attributes)``
+    Usage: {0}(operand, **attributes)
 
-    which produces the following MathML code
+    which produces the following MathML code:
 
         <mrow>
             <mo>{1}</mo>
@@ -265,10 +264,10 @@ UNARY_OPERATION_DOCSTRING = (
 
 
 def unary_operation_type(name, operator):
-    """Return a class derived from ``UnaryOperation``.
+    """Return a class derived from UnaryOperation.
 
-    The returned class is named ``name``. The ``operator`` is specified
-    as a string.
+    The returned class is named name. The operator is specified as a
+    string.
     """
     return type(name, (UnaryOperation,),
                 {'operator': Operator(operator),
@@ -276,11 +275,11 @@ def unary_operation_type(name, operator):
 
 
 BINARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the ``{1}`` binary operation.
+    """PyMathML representation of the {1} binary operation.
 
-    Usage: ``{0}(*operands, **attributes)``
+    Usage: {0}(*operands, **attributes)
 
-    which produces the following MathML code (associativity is assumed)
+    which produces the following MathML code (associativity is assumed):
 
         <mrow>
             operands[0]
@@ -294,10 +293,10 @@ BINARY_OPERATION_DOCSTRING = (
 
 
 def binary_operation_type(name, operator):
-    """Return a class derived from ``BinaryOperation``.
+    """Return a class derived from BinaryOperation.
 
-    The returned class is named ``name``. The ``operator`` is specified
-    as a string.
+    The returned class is named name. The operator is specified as a
+    string.
     """
     return type(name, (BinaryOperation,),
                 {'operator': Operator(operator),
@@ -305,12 +304,12 @@ def binary_operation_type(name, operator):
 
 
 NARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the ``{1}`` n-ary operation.
+    """PyMathML representation of the {1} n-ary operation.
 
-    Usage: ``{0}(operand, start, end, **attributes)``
+    Usage: {0}(operand, start, end, **attributes)
 
-    If both ``start`` and ``end`` are not ``None``, the following MathML
-    code is produced
+    If both start and end are not None, the following MathML code is
+    produced:
 
         <mrow>
             <munderover>
@@ -321,8 +320,7 @@ NARY_OPERATION_DOCSTRING = (
             operand
         </mrow>
 
-    If only ``start`` is not ``None``, the following MathML code is
-    produced
+    If only start is not None, the following MathML code is produced:
 
         <mrow>
             <munder>
@@ -332,8 +330,8 @@ NARY_OPERATION_DOCSTRING = (
             operand
         </mrow>
 
-    Finally, if only ``end`` is not ``None``, the following MathML code
-    is produced
+    Finally, if only end is not None, the following MathML code is
+    produced:
 
         <mrow>
             <mover>
@@ -346,10 +344,10 @@ NARY_OPERATION_DOCSTRING = (
 
 
 def nary_operation_type(name, operator):
-    """Return a class derived from ``NaryOperation``.
+    """Return a class derived from NaryOperation.
 
-    The returned class is named ``name``. The ``operator`` is specified
-    as a string.
+    The returned class is named name. The operator is specified as a
+    string.
     """
     return type(name, (NaryOperation,),
                 {'operator': Operator(operator),
@@ -420,15 +418,15 @@ Sum = nary_operation_type('Sum', '\N{N-ARY SUMMATION}')
 
 
 def expression(expr):
-    """Convert ``expr`` to a PyMathML expression.
+    """Convert expr to a PyMathML expression.
 
-    The following conversion rules apply
+    The following conversion rules apply:
 
       - PyMathML expressions are returned unchanged,
-      - numbers are converted to ``Number``,
-      - strings are converted to ``Identifier``.
+      - numbers are converted to Number,
+      - strings are converted to Identifier.
 
-    In other cases, a ``ValueError`` is raised.
+    In other cases, a ValueError is raised.
     """
     if expr is None:
         return None
@@ -443,14 +441,14 @@ def expression(expr):
 
 
 def tomathml(expr, display=None):
-    """Convert ``expr`` to MathML.
+    """Convert expr to MathML.
 
-    The MathML representation of ``expr`` is returned as a
-    ``xml.etree.ElementTree.Element``.
+    The MathML representation of expr is returned as a
+    xml.etree.ElementTree.Element.
 
-    If ``display`` is not ``None``, then the expression is embedded
-    into a ``math`` tag, with the specified ``'display'`` attribute
-    (namely: ``'inline'`` or ``'block'``).
+    If display is not None, then the expression is embedded into a math
+    tag, with the specified 'display' attribute (namely: 'inline' or
+    'block').
     """
     element = expression(expr).tomathml()
     if display is None:
@@ -464,14 +462,13 @@ def tomathml(expr, display=None):
 
 
 def tostring(expr, display=None):
-    """Return the MathML representation of ``expr`` as a string.
+    """Return the MathML representation of expr as a string.
 
-    The MathML representation of ``expr`` is returned as a string.
-    ``xml.etree.ElementTree.Element``.
+    The MathML representation of expr is returned as a string.
 
-    If ``display`` is not ``None``, then the expression is embedded
-    into a ``math`` tag, with the specified ``'display'`` attribute
-    (namely: ``'inline'`` or ``'block'``).
+    If display is not None, then the expression is embedded into a math
+    tag, with the specified 'display' attribute (namely: 'inline' or
+    'block').
     """
     return ET.tostring(tomathml(expr, display), encoding='unicode')
 
