@@ -31,7 +31,7 @@ print(expr)
     <mrow><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mrow><mrow><mn>2</mn><mo>⁢</mo><mi>a</mi></mrow><mo>⁢</mo><mi>b</mi></mrow></mrow><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow>
 
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
-    <mi>
-        a
-    </mi>
+<mi>
+a
+</mi>
 </math>
