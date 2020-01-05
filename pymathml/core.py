@@ -51,8 +51,7 @@ class BaseExpression:
         return Pos(self)
 
     def __getitem__(self, key):
-        subscript = (Fenced(*key, open='', close='')
-                     if isinstance(key, tuple) else key)
+        subscript = Row(*key) if isinstance(key, tuple) else key
         return Sub(self, subscript)
 
     def __call__(self, *args):
