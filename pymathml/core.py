@@ -35,6 +35,12 @@ class BaseExpression:
     def __rmatmul__(self, other):
         return Dot(other, self)
 
+    def __floordiv__(self, other):
+        return Frac(self, other)
+
+    def __rfloordiv__(self, other):
+        return Frac(other, self)
+
     def __pow__(self, other):
         return Sup(self, other)
 
