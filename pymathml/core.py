@@ -8,8 +8,9 @@ class BaseExpression:
     This class does not provide an initializer and should *not* be
     instantiated directly. Use derived classes instead.
     """
+
     def __str__(self):
-        return ET.tostring(self.tomathml(), encoding='unicode')
+        return ET.tostring(self.tomathml(), encoding="unicode")
 
     def __add__(self, other):
         return Plus(self, other)
@@ -55,7 +56,7 @@ class BaseExpression:
         return Sub(self, subscript)
 
     def __call__(self, *args):
-        return Row(self, Operator('\N{FUNCTION APPLICATION}'), Fenced(*args))
+        return Row(self, Operator("\N{FUNCTION APPLICATION}"), Fenced(*args))
 
     def tomathml(self):
         """Convert this object to MathML.
@@ -63,12 +64,12 @@ class BaseExpression:
         The MathML representation of this object is returned as a
         xml.etree.ElementTree.Element.
         """
-        raise NotImplementedError('sub-classes of BaseExpression should'
-                                  ' implement this method')
+        raise NotImplementedError(
+            "sub-classes of BaseExpression should" " implement this method"
+        )
 
     def _repr_html_(self):
-        return ET.tostring(tomathml(self, display=('block')),
-                           encoding='unicode')
+        return ET.tostring(tomathml(self, display=("block")), encoding="unicode")
 
 
 class Token(BaseExpression):
@@ -86,9 +87,8 @@ class Token(BaseExpression):
     def __repr__(self):
         params = [repr(self.value)]
         if self.attributes:
-            params += ['{}=\'{}\''.format(k, v)
-                       for k, v in self.attributes.items()]
-        return '{}({})'.format(self.__class__.__name__, ', '.join(params))
+            params += ["{}='{}'".format(k, v) for k, v in self.attributes.items()]
+        return "{}({})".format(self.__class__.__name__, ", ".join(params))
 
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
@@ -108,6 +108,7 @@ class Expression(BaseExpression):
     This class should *not* be instanciated directly. Use derived
     classes instead (see list in documentation).
     """
+
     def __init__(self, *expressions, **attributes):
         """Initialize expression.
 
@@ -121,9 +122,8 @@ class Expression(BaseExpression):
     def __repr__(self):
         params = [repr(child) for child in self.children]
         if self.attributes:
-            params += ['{}=\'{}\''.format(k, v)
-                       for k, v in self.attributes.items()]
-        return '{}({})'.format(self.__class__.__name__, ', '.join(params))
+            params += ["{}='{}'".format(k, v) for k, v in self.attributes.items()]
+        return "{}({})".format(self.__class__.__name__, ", ".join(params))
 
     def tomathml(self):
         element = ET.Element(self.tag, **self.attributes)
@@ -139,9 +139,9 @@ class UnaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
+
     def tomathml(self):
-        return Row(self.operator, self.children[0],
-                   **self.attributes).tomathml()
+        return Row(self.operator, self.children[0], **self.attributes).tomathml()
 
 
 class BinaryOperation(Expression):
@@ -153,6 +153,7 @@ class BinaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
+
     def tomathml(self):
         children = [self.children[0]]
         for child in self.children[1:]:
@@ -167,6 +168,7 @@ class NaryOperation(Expression):
     This class should *not* be instanciated directly. Use derived
     classes instead.
     """
+
     def tomathml(self):
         expr, start, end = self.children
         operator = self.operator
@@ -185,8 +187,7 @@ class NaryOperation(Expression):
 # Automatic creation of derived classes
 # =====================================
 #
-TOKEN_DOCSTRING = (
-    """PyMathML representation of the {1} token element.
+TOKEN_DOCSTRING = """PyMathML representation of the {1} token element.
 
     See MathML specifications, section {2}.
 
@@ -197,7 +198,7 @@ TOKEN_DOCSTRING = (
         <{1}>str(value)</{1}>
 
     (note the call to str).
-    """)
+    """
 
 
 def token_type(name, tag, section):
@@ -206,13 +207,14 @@ def token_type(name, tag, section):
     The returned class is named name. The docstring refers to the
     specified section of the MathML specifications.
     """
-    return type(name, (Token,),
-                {'tag': tag,
-                 '__doc__': TOKEN_DOCSTRING.format(name, tag, section)})
+    return type(
+        name,
+        (Token,),
+        {"tag": tag, "__doc__": TOKEN_DOCSTRING.format(name, tag, section)},
+    )
 
 
-EXPRESSION_DOCSTRING = (
-    """PyMathML representation of the {1} element.
+EXPRESSION_DOCSTRING = """PyMathML representation of the {1} element.
 
     See MathML specifications, section {2}.
 
@@ -223,7 +225,7 @@ EXPRESSION_DOCSTRING = (
         <{1}>
             {4}
         </{1}>
-    """)
+    """
 
 
 def expression_type(name, tag, section, params=None):
@@ -234,28 +236,27 @@ def expression_type(name, tag, section, params=None):
     of the docstring lists the params of the initializer (*expressions
     if not specified).
     """
-    placeholder = '{4}'
+    placeholder = "{4}"
     doc = EXPRESSION_DOCSTRING
     if params is None:
-        params_list = ['tomathml(expressions[0])',
-                       'tomathml(expressions[1])',
-                       '...']
+        params_list = ["tomathml(expressions[0])", "tomathml(expressions[1])", "..."]
     else:
-        params_list = ['tomathml({})'.format(s.strip())
-                       for s in params.split(',')]
+        params_list = ["tomathml({})".format(s.strip()) for s in params.split(",")]
     n = len(params_list)
     lines = doc.splitlines()
     for i, s in enumerate(lines):
         if placeholder in s:
             break
-    lines = (lines[:i]+[lines[i].replace('4', str(j+4)) for j in range(n)]
-             + lines[i+1:])
-    doc = '\n'.join(lines).format(name, tag, section, params, *params_list)
-    return type(name, (Expression,), {'tag': tag, '__doc__': doc})
+    lines = (
+        lines[:i]
+        + [lines[i].replace("4", str(j + 4)) for j in range(n)]
+        + lines[i + 1 :]
+    )
+    doc = "\n".join(lines).format(name, tag, section, params, *params_list)
+    return type(name, (Expression,), {"tag": tag, "__doc__": doc})
 
 
-UNARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the {1} unary operation.
+UNARY_OPERATION_DOCSTRING = """PyMathML representation of the {1} unary operation.
 
     Usage: {0}(operand, **attributes)
 
@@ -265,7 +266,7 @@ UNARY_OPERATION_DOCSTRING = (
             <mo>{1}</mo>
             operand
         </mrow>
-    """)
+    """
 
 
 def unary_operation_type(name, operator):
@@ -274,13 +275,17 @@ def unary_operation_type(name, operator):
     The returned class is named name. The operator is specified as a
     string.
     """
-    return type(name, (UnaryOperation,),
-                {'operator': Operator(operator),
-                 '__doc__': UNARY_OPERATION_DOCSTRING.format(name, operator)})
+    return type(
+        name,
+        (UnaryOperation,),
+        {
+            "operator": Operator(operator),
+            "__doc__": UNARY_OPERATION_DOCSTRING.format(name, operator),
+        },
+    )
 
 
-BINARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the {1} binary operation.
+BINARY_OPERATION_DOCSTRING = """PyMathML representation of the {1} binary operation.
 
     Usage: {0}(*operands, **attributes)
 
@@ -294,7 +299,7 @@ BINARY_OPERATION_DOCSTRING = (
             operands[2]
             ...
         </mrow>
-    """)
+    """
 
 
 def binary_operation_type(name, operator):
@@ -303,13 +308,17 @@ def binary_operation_type(name, operator):
     The returned class is named name. The operator is specified as a
     string.
     """
-    return type(name, (BinaryOperation,),
-                {'operator': Operator(operator),
-                 '__doc__': BINARY_OPERATION_DOCSTRING.format(name, operator)})
+    return type(
+        name,
+        (BinaryOperation,),
+        {
+            "operator": Operator(operator),
+            "__doc__": BINARY_OPERATION_DOCSTRING.format(name, operator),
+        },
+    )
 
 
-NARY_OPERATION_DOCSTRING = (
-    """PyMathML representation of the {1} n-ary operation.
+NARY_OPERATION_DOCSTRING = """PyMathML representation of the {1} n-ary operation.
 
     Usage: {0}(operand, start, end, **attributes)
 
@@ -345,7 +354,7 @@ NARY_OPERATION_DOCSTRING = (
             </mover>
             operand
         </mrow>
-    """)
+    """
 
 
 def nary_operation_type(name, operator):
@@ -354,19 +363,24 @@ def nary_operation_type(name, operator):
     The returned class is named name. The operator is specified as a
     string.
     """
-    return type(name, (NaryOperation,),
-                {'operator': Operator(operator),
-                 '__doc__': NARY_OPERATION_DOCSTRING.format(name, operator)})
+    return type(
+        name,
+        (NaryOperation,),
+        {
+            "operator": Operator(operator),
+            "__doc__": NARY_OPERATION_DOCSTRING.format(name, operator),
+        },
+    )
 
 
 #
 # Creation of classes derived from Token
 # ======================================
 #
-Identifier = token_type('Identifier', 'mi', '3.2.3')
-Number = token_type('Number', 'mn', '3.2.4')
-Operator = token_type('Operator', 'mo', '3.2.5')
-Text = token_type('Text', 'mtext', '3.2.6')
+Identifier = token_type("Identifier", "mi", "3.2.3")
+Number = token_type("Number", "mn", "3.2.4")
+Operator = token_type("Operator", "mo", "3.2.5")
+Text = token_type("Text", "mtext", "3.2.6")
 
 #
 # Creation of classes derived from Expression
@@ -375,51 +389,51 @@ Text = token_type('Text', 'mtext', '3.2.6')
 # General layout schemata
 # -----------------------
 #
-Row = expression_type('Row', 'mrow', '3.3.1')
-Frac = expression_type('Frac', 'mfrac', '3.3.2', 'numerator, denominator')
-Sqrt = expression_type('Sqrt', 'msqrt', '3.3.3', 'base')
-Root = expression_type('Root', 'mroot', '3.3.3', 'base, index')
-Style = expression_type('Style', 'mstyle', '3.3.4')
-Fenced = expression_type('Fenced', 'mfenced', '3.3.8')
+Row = expression_type("Row", "mrow", "3.3.1")
+Frac = expression_type("Frac", "mfrac", "3.3.2", "numerator, denominator")
+Sqrt = expression_type("Sqrt", "msqrt", "3.3.3", "base")
+Root = expression_type("Root", "mroot", "3.3.3", "base, index")
+Style = expression_type("Style", "mstyle", "3.3.4")
+Fenced = expression_type("Fenced", "mfenced", "3.3.8")
 
 #
 # Script and limit schemata
 # -------------------------
 #
-Sub = expression_type('Sub', 'msub', '3.4.1', 'base, subscript')
-Sup = expression_type('Sup', 'msup', '3.4.2', 'base, superscript')
-SubSup = expression_type('SubSup', 'msubsup', '3.4.3',
-                         'base, subscript, superscript')
-Under = expression_type('Under', 'munder', '3.4.4', 'base, underscript')
-Over = expression_type('Over', 'mover', '3.4.5', 'base, overscript')
-UnderOver = expression_type('UnderOver', 'munderover', '3.4.6',
-                            'base, underscript, overscript')
+Sub = expression_type("Sub", "msub", "3.4.1", "base, subscript")
+Sup = expression_type("Sup", "msup", "3.4.2", "base, superscript")
+SubSup = expression_type("SubSup", "msubsup", "3.4.3", "base, subscript, superscript")
+Under = expression_type("Under", "munder", "3.4.4", "base, underscript")
+Over = expression_type("Over", "mover", "3.4.5", "base, overscript")
+UnderOver = expression_type(
+    "UnderOver", "munderover", "3.4.6", "base, underscript, overscript"
+)
 
 #
 # Tables and matrices
 # -------------------
 #
-Table = expression_type('Table', 'mtable', '3.5.1')
-TableRow = expression_type('TableRow', 'mtr', '3.5.2')
-TableEntry = expression_type('TableEntry', 'mtd', '3.5.4', 'entry')
+Table = expression_type("Table", "mtable", "3.5.1")
+TableRow = expression_type("TableRow", "mtr", "3.5.2")
+TableEntry = expression_type("TableEntry", "mtd", "3.5.4", "entry")
 
 #
 # Unary, binary and n-ary operations
 # ----------------------------------
 #
 
-Pos = unary_operation_type('Pos', '+')
-Neg = unary_operation_type('Neg', '-')
+Pos = unary_operation_type("Pos", "+")
+Neg = unary_operation_type("Neg", "-")
 
-Equals = binary_operation_type('Equals', '=')
-Plus = binary_operation_type('Plus', '+')
-Minus = binary_operation_type('Minus', '-')
-Times = binary_operation_type('Times', '\N{MULTIPLICATION SIGN}')
-InvisibleTimes = binary_operation_type('Times', '\N{INVISIBLE TIMES}')
-Dot = binary_operation_type('Dot', '\N{DOT OPERATOR}')
+Equals = binary_operation_type("Equals", "=")
+Plus = binary_operation_type("Plus", "+")
+Minus = binary_operation_type("Minus", "-")
+Times = binary_operation_type("Times", "\N{MULTIPLICATION SIGN}")
+InvisibleTimes = binary_operation_type("Times", "\N{INVISIBLE TIMES}")
+Dot = binary_operation_type("Dot", "\N{DOT OPERATOR}")
 
-Product = nary_operation_type('Product', '\N{N-ARY PRODUCT}')
-Sum = nary_operation_type('Sum', '\N{N-ARY SUMMATION}')
+Product = nary_operation_type("Product", "\N{N-ARY PRODUCT}")
+Sum = nary_operation_type("Sum", "\N{N-ARY SUMMATION}")
 
 
 def expression(expr):
@@ -459,9 +473,9 @@ def tomathml(expr, display=None):
     if display is None:
         return element
     else:
-        math = ET.Element('math',
-                          xmlns='http://www.w3.org/1998/Math/MathML',
-                          display=str(display))
+        math = ET.Element(
+            "math", xmlns="http://www.w3.org/1998/Math/MathML", display=str(display)
+        )
         math.append(element)
         return math
 
@@ -475,7 +489,7 @@ def tostring(expr, display=None):
     tag, with the specified 'display' attribute (namely: 'inline' or
     'block').
     """
-    return ET.tostring(tomathml(expr, display), encoding='unicode')
+    return ET.tostring(tomathml(expr, display), encoding="unicode")
 
 
 def inline(expr):
@@ -484,7 +498,7 @@ def inline(expr):
     The expression is embedded into a math tag, with the 'display'
     attribute set to 'inline'.
     """
-    return ET.tostring(tomathml(expr, 'inline'), encoding='unicode')
+    return ET.tostring(tomathml(expr, "inline"), encoding="unicode")
 
 
 def block(expr):
@@ -493,7 +507,7 @@ def block(expr):
     The expression is embedded into a math tag, with the 'display'
     attribute set to 'block'.
     """
-    return ET.tostring(tomathml(expr, 'block'), encoding='unicode')
+    return ET.tostring(tomathml(expr, "block"), encoding="unicode")
 
 
 # Local Variables:

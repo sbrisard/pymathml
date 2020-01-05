@@ -1,8 +1,7 @@
 """A collection of functions to facilitate creation of expressions.
 
 """
-from pymathml.core import (Identifier, Operator, Table, TableRow, TableEntry,
-                           Under, )
+from pymathml.core import Identifier, Operator, Table, TableRow, TableEntry, Under
 
 
 def identifiers(*names, **attributes):
@@ -22,8 +21,7 @@ def table(cells, **attributes):
     Table object (attributes cannot be set for the nested TableRow and
     TableEntry objects)
     """
-    return Table(*[TableRow(*[TableEntry(e) for e in r]) for r in cells],
-                 **attributes)
+    return Table(*[TableRow(*[TableEntry(e) for e in r]) for r in cells], **attributes)
 
 
 def underbrace(expr, underscript):
@@ -33,5 +31,7 @@ def underbrace(expr, underscript):
 
         \\underbrace{expr}_{underscript}
     """
-    return Under(expr, Under(Operator('\N{BOTTOM CURLY BRACKET}'), underscript,
-                             accentunder='true'))
+    return Under(
+        expr,
+        Under(Operator("\N{BOTTOM CURLY BRACKET}"), underscript, accentunder="true"),
+    )
