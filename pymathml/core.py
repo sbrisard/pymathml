@@ -479,6 +479,24 @@ def tostring(expr, display=None):
     return ET.tostring(tomathml(expr, display), encoding='unicode')
 
 
+def inline(expr):
+    """Return the MathML representation of expr as a string.
+
+    The expression is embedded into a math tag, with the 'display'
+    attribute set to 'inline'.
+    """
+    return ET.tostring(tomathml(expr, 'inline'), encoding='unicode')
+
+
+def block(expr):
+    """Return the MathML representation of expr as a string.
+
+    The expression is embedded into a math tag, with the 'display'
+    attribute set to 'block'.
+    """
+    return ET.tostring(tomathml(expr, 'block'), encoding='unicode')
+
+
 # Local Variables:
 # fill-column: 72
 # End:
