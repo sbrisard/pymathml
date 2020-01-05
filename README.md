@@ -39,7 +39,7 @@ To install PyMathML, clone this repository and issue the following command:
     python setyp.py install
 
 The remainder of this page is a tutorial. It is organized as follows:
-
+  
   - [Converting PyMathML expressions to MathML](#converting-pymathml-expressions-to-mathml)
   - [Basic MathML elements](#basic-mathml-elements)
     - [Token elements](#token-elements)
@@ -50,7 +50,7 @@ The remainder of this page is a tutorial. It is organized as follows:
     - [Binary operations](#binary-operations)
     - [N-ary operations](#n-ary-operations)
   - [Convenience functions](#convenience-functions)
-
+    
 This ``README.md`` is the Markdown export of a Jupyter Notebook which can be
 found in the ``docs/`` directory of this repository.
 
@@ -202,6 +202,32 @@ tostring('a', display='inline')
 
 
 
+The functions `inline` and `block` are alternatives to the function `tostring` with a `display` argument.
+
+
+```python
+block('a')
+```
+
+
+
+
+    '<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>'
+
+
+
+
+```python
+inline('a')
+```
+
+
+
+
+    '<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>'
+
+
+
 
 ## Basic MathML elements
 
@@ -272,13 +298,13 @@ print(inspect.getdoc(SubSup))
 ```
 
     PyMathML representation of the msubsup element.
-
+    
     See MathML specifications, section 3.4.3.
-
+    
     Usage: SubSup(base, subscript, superscript, **attributes)
-
+    
     which produces the following MathML code:
-
+    
         <msubsup>
             tomathml(base)
             tomathml(subscript)
@@ -374,7 +400,7 @@ In the table below, ``e``, ``e1`` and ``e2`` are PyMathML expressions, ``me``,
 | ``e1-e2``  | ``<mrow>me1<mo>-</mo>me2</mrow>``                      |
 | ``e1*e2``  | ``<mrow>me1<mo>&it;</mo>me2</mrow>``                   |
 | ``e1@e2``  | ``<mrow>me1<mo>⋅</mo>me2</mrow>``                      |
-| ``e1//e2`` | ``<mfrac>me1 me2</mfrac>``
+| ``e1//e2`` | ``<mfrac>me1 me2</mfrac>``                             |
 | ``e1**e2`` | ``<msup>me1 me2</msup>``                               |
 | ``e1[e2]`` | ``<msub>me1 me2</msub>``                               |
 | ``e1(e2)`` | ``<mrow>me1<mo>&af;</mo><mfenced>e2</mfenced></mrow>`` |
@@ -485,11 +511,11 @@ print(inspect.getdoc(Not))
 ```
 
     PyMathML representation of the ¬ unary operation.
-
+    
     Usage: Not(operand, **attributes)
-
+    
     which produces the following MathML code:
-
+    
         <mrow>
             <mo>¬</mo>
             operand
@@ -585,11 +611,11 @@ print(inspect.getdoc(CircledTimes))
 ```
 
     PyMathML representation of the ⊗ binary operation.
-
+    
     Usage: CircledTimes(*operands, **attributes)
-
+    
     which produces the following MathML code (associativity is assumed):
-
+    
         <mrow>
             operands[0]
             <mo>⊗</mo>
@@ -687,12 +713,12 @@ print(inspect.getdoc(Union))
 ```
 
     PyMathML representation of the ⋃ n-ary operation.
-
+    
     Usage: Union(operand, start, end, **attributes)
-
+    
     If both start and end are not None, the following MathML code is
     produced:
-
+    
         <mrow>
             <munderover>
                 <mo>⋃</mo>
@@ -701,9 +727,9 @@ print(inspect.getdoc(Union))
             </munderover>
             operand
         </mrow>
-
+    
     If only start is not None, the following MathML code is produced:
-
+    
         <mrow>
             <munder>
                 <mo>⋃</mo>
@@ -711,10 +737,10 @@ print(inspect.getdoc(Union))
             </munder>
             operand
         </mrow>
-
+    
     Finally, if only end is not None, the following MathML code is
     produced:
-
+    
         <mrow>
             <mover>
                 <mo>⋃</mo>
@@ -736,31 +762,34 @@ help(pymathml.utils)
 ```
 
     Help on module pymathml.utils in pymathml:
-
+    
     NAME
         pymathml.utils - A collection of functions to facilitate creation of expressions.
-
+    
     FUNCTIONS
         identifiers(*names, **attributes)
             Return instances of Identifier with specified names.
-
+            
             The **attributes are passed to the initializer of all returned
             instances of Identifier.
-
+        
         table(cells, **attributes)
             Create a Table.
-
+            
             The cells of the returned table are specified as an iterable of
             iterables. The **attributes are passed to the initializer of the
             Table object (attributes cannot be set for the nested TableRow and
             TableEntry objects)
-
+        
         underbrace(expr, underscript)
             Create an underbraced expression.
-
+            
             The LaTeX equivalent is:
-
+            
                 \underbrace{expr}_{underscript}
-
+    
     FILE
-        c:\users\sbrisard\documents\professionnels\projets\pymathml\pymathml\utils.py
+        /home/sbrisard/Documents/programmes/pymathml/pymathml/utils.py
+    
+    
+
