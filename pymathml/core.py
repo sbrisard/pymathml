@@ -431,6 +431,7 @@ Minus = binary_operation_type("Minus", "-")
 Times = binary_operation_type("Times", "\N{MULTIPLICATION SIGN}")
 InvisibleTimes = binary_operation_type("Times", "\N{INVISIBLE TIMES}")
 Dot = binary_operation_type("Dot", "\N{DOT OPERATOR}")
+CircledTimes = binary_operation_type("CircledTimes", "\N{CIRCLED TIMES}")
 
 Product = nary_operation_type("Product", "\N{N-ARY PRODUCT}")
 Sum = nary_operation_type("Sum", "\N{N-ARY SUMMATION}")

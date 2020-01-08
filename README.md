@@ -529,13 +529,13 @@ implemented binary operations are listed below.
 
 | PyMathML       | Operator |
 |----------------|----------|
+| CircledTimes   | ⊗        |
 | Dot            | ⋅        |
 | Equals         | =        |
 | InvisibleTimes | ⁢         |
 | Minus          | -        |
 | Plus           | +        |
 | Times          | ×        |
-
 
 The operands are passed to the initializer of the binary operation to be
 constructed. They are embedded in a ``mrow`` element.
@@ -625,6 +625,8 @@ print(inspect.getdoc(CircledTimes))
             ...
         </mrow>
 
+
+Note that the `CircledTimes` binary operator is actually defined in the library.
 
 ### N-ary operations
 
