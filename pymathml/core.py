@@ -36,6 +36,12 @@ class BaseExpression:
     def __rmatmul__(self, other):
         return Dot(other, self)
 
+    def __truediv__(self, other):
+        return Div(self, other)
+
+    def __rtruediv__(self, other):
+        return Div(other, self)
+
     def __floordiv__(self, other):
         return Frac(self, other)
 
@@ -432,6 +438,7 @@ Times = binary_operation_type("Times", "\N{MULTIPLICATION SIGN}")
 InvisibleTimes = binary_operation_type("Times", "\N{INVISIBLE TIMES}")
 Dot = binary_operation_type("Dot", "\N{DOT OPERATOR}")
 CircledTimes = binary_operation_type("CircledTimes", "\N{CIRCLED TIMES}")
+Div = binary_operation_type("Div", "/")
 
 Product = nary_operation_type("Product", "\N{N-ARY PRODUCT}")
 Sum = nary_operation_type("Sum", "\N{N-ARY SUMMATION}")

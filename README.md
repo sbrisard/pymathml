@@ -400,6 +400,7 @@ In the table below, ``e``, ``e1`` and ``e2`` are PyMathML expressions, ``me``,
 | ``e1-e2``  | ``<mrow>me1<mo>-</mo>me2</mrow>``                      |
 | ``e1*e2``  | ``<mrow>me1<mo>&it;</mo>me2</mrow>``                   |
 | ``e1@e2``  | ``<mrow>me1<mo>⋅</mo>me2</mrow>``                      |
+| ``e1/e2``  | ``<mrow>me1<mo>/</mo>me2</mrow>``                      |
 | ``e1//e2`` | ``<mfrac>me1 me2</mfrac>``                             |
 | ``e1**e2`` | ``<msup>me1 me2</msup>``                               |
 | ``e1[e2]`` | ``<msub>me1 me2</msub>``                               |
@@ -530,6 +531,7 @@ implemented binary operations are listed below.
 | PyMathML       | Operator |
 |----------------|----------|
 | CircledTimes   | ⊗        |
+| Div            | /        |
 | Dot            | ⋅        |
 | Equals         | =        |
 | InvisibleTimes | ⁢         |
